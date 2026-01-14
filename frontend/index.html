@@ -3,51 +3,432 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="utils/img/-7.webp" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
     <title>Inicio</title>
 </head>
 <body>
     <header>
         <nav>
+            <img src="utils/img/-7.webp" href="index.html" alt="logo del restaurante">
             <ul>
-                <li>Inicio</li>
-                <li>Quienes Somos</li>
-                <li>Contacto</li>
-                <li>Reservas</li>
+                <li class="nav-item" href="index.html">Inicio</li>
+                <li class="nav-item" href="quienes_somos.html">Quienes Somos</li>
+                <li class="nav-item" href="contacto.html">Contacto</li>
+                <li class="nav-item" href="reservas.html">Reservas</li>
             </ul>
         </nav>
     </header>
     <main>
-        <h1>Inicio</h1>
-        <div>Reservas</div>
+        <h1 class="inicio-titulo">Inicio</h1>
+        <div id="reservas">Reservas</div>
         <div id="menu">
-            <h2>Menu</h2>
+            <h2>Menú</h2>
             <div id="platos">
-               <p class="titulo">
-                    Platillo de bonito con aceitunas, antxoas y guindillas
-               </p>
-               <p class="precio">3,5/11 €</p>
-               <p class="titulo">
-                    Tabla de jamón ibérico
-               </p>
-               <p class="precio">12 €</p>
-               <p class="titulo">
-                    Croquetas de jamón o chipirón
-               </p>
-               <p class="precio">2 €</p>
-               <p class="titulo">
-                    Bola de carne
-               </p>
-               <p class="precio">2,5 €</p>
-               <p class="titulo">
-                    Chorizo a la sidra
-               </p>
-               <p class="precio">2,5 €</p>
-               <p class="titulo">
-                    Verduritas en tempura
-               </p>
-               <p class="precio">8,5 €</p>
+                <h2 class="menu-titulo">Desayunos</h2>
+                <div class="platos tostadas grid-menu" id="tostadas">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Mantequilla y mermelada
+                        </h3>
+                        <p class="precio">3,5 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Aceite
+                        </h3>
+                        <p class="precio">3€</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Tomate y aceite
+                        </h3>
+                        <p class="precio">3,5 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Tomate, aceite y jamón
+                        </h3>
+                        <p class="precio">4,5 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Tomate, aceite y aguacate
+                        </h3>
+                        <p class="precio">4 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                          Queso crema, aguacate y salmón
+                        </h3>
+                        <p class="precio">5,9 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Nutella, plátano y avellanas
+                        </h3>
+                        <p class="precio">4 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Crema de cacahuete, plátano y coco
+                        </h3>
+                        <p class="precio">4 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Arima Bol</h2>
+                <div class="platos bol">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Yogurt griego, granola y miel
+                        </h3>
+                        <p class="precio">3,5 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Yogurt griego, granola, fruta de temporada y mantequilla de cacahuete
+                        </h3>
+                        <p class="precio">4,5 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Bollería</h2>
+                <div class="platos bolleria">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Croissant
+                        </h3>
+                        <p class="precio">2€</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Bizcocho de limón
+                        </h3>
+                        <p class="precio">2,5 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Napolitana de chocolate
+                        </h3>
+                        <p class="precio">2 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Crepe de nutella y plátano
+                        </h3>
+                        <p class="precio">4 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Snacks</h2>
+                <div class="platos snacks grid-menu">
+                    <div class="plato">
+                        <h3 class="titulo">
+                             Platillo de bonito con aceitunas, antxoas y guindillas
+                        </h3>
+                        <p class="precio">3,5/11 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                             Tabla de jamón ibérico
+                        </h3>
+                        <p class="precio">12 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                             Croquetas de jamón o chipirón
+                        </h3>
+                        <p class="precio">2 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Bola de carne
+                        </h3>
+                        <p class="precio">2,5 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Chorizo a la sidra
+                        </h3>
+                        <p class="precio">2,5 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Verduritas en tempura
+                        </h3>
+                        <p class="precio">8,5 €</p>
+                    </div>
+                    <div class="plato">
+                            <h3 class="titulo">
+                                Gyozas, mar y montaña (6 unidades)
+                            </h3>
+                            <p class="precio">12 €</p>
+                    </div>
+                    <div class="plato">
+                            <h3 class="titulo">
+                                Patatas Bravas
+                            </h3>
+                            <p class="precio">7,5 €</p>
+                    </div>
+                    <div class="plato">
+                            <h3 class="titulo">
+                                Chopitos fritos
+                            </h3>
+                            <p class="precio">8,5 €</p>
+                    </div>
+                    <div class="plato">
+                            <h3 class="titulo">
+                                Fingers de pollo con salsa BBQ
+                            </h3>
+                            <p class="precio">8 €</p>
+                    </div>
+                    <div class="plato">
+                            <h3 class="titulo">
+                                Nacho Arima con pico de gallo, salsa cheddar y guacamole
+                            </h3>
+                            <p class="precio">9 €</p>
+                    </div>
+                    <div class="plato">
+                            <h3 class="titulo">
+                                Nachos bolognesa (pico de gallo, salsa cheddar, guacamole y salsa bolognesa)
+                            </h3>
+                            <p class="precio">12 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Ensaladas</h2>
+                <div class="platos ensaladas grid-menu">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Nuestro Poke (Salmon marinado con soja y citricos, arroz, edamame, alga wakame, tomates cherry y mango con salsa siracha-mayo)
+                        </h3>
+                        <p class="precio">13 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Ensalada Zabaleta Berri (mezcla de lechugas,tomate seco, parmesano, pollo crujiente, aliño de miel y mostaza)
+                        </h3>
+                        <p class="precio">10 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Ensalada Mixta (lechuga de pais, tomate, bonito, huevo duro, cebolleta y esparragos)
+                        </h3>
+                        <p class="precio">7 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Burrata con verduras asadas, salsa romezco y polvo de ibérico
+                        </h3>
+                        <p class="precio">12,5 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Langostins, cherrys, pepino, cebolla morada, aguacate, brotes tiernos y vinagreta de cacahuetes
+                        </h3>
+                        <p class="precio">12 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Pasta</h2>
+                <div class="platos pasta">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Pasta fresca con salsa de hongos (yema de huevo y parmesano)
+                        </h3>
+                        <p class="precio">10 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Pasta bolognesa (con parmesano)
+                        </h3>
+                        <p class="precio">9 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Pasta carbonara
+                        </h3>
+                        <p class="precio">10 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Para compartir</h2>
+                <div class="platos compartir grid-menu">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Bacalao gratinado con piperrada
+                        </h3>
+                        <p class="precio">15 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Secreto ibérico con chimichurri y patatas
+                        </h3>
+                        <p class="precio">16 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Carrilleras de ternera con pure de patatas
+                        </h3>
+                        <p class="precio">14 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Pollo tikk masala con arroz basmati
+                        </h3>
+                        <p class="precio">10 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Costillas de cerdo con salsa barbacoa asiática
+                        </h3>
+                        <p class="precio">14 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Bocadillos</h2>
+                <div class="platos bocadillos">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Bocadillo de pastrami con pepinillos, tomate, salsa de mostaza y miel, rucula y mayonesa
+                        </h3>
+                        <p class="precio">7 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Bocadillo de cochinita pibil con guacamole y cebolla encurtida
+                        </h3>
+                        <p class="precio">8,5 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Jamon iberico con setas salteadas al ajillo, tomate seco y salsa de queso azul
+                        </h3>
+                        <p class="precio">9,5 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Sandwiches</h2>
+                <div class="platos sandwich">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Sanwich de pulled prok con cheddar y ensalada de col
+                        </h3>
+                        <p class="precio">10 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Criollo (Sanwich de chorizo criollo, salsa gaucha, tomate y mozarella)
+                        </h3>
+                        <p class="precio">8 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Hamburguesas</h2>
+                <div class="platos hamburguesa grid-menu">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Hamburguesa Arima (carne de vacuno, queso cheddar, lechuga, tomate, cebolla morada, pepinillos y salsa arima)
+                        </h3>
+                        <p class="precio">12 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Hamburguesa de ternera con o sin queso
+                        </h3>
+                        <p class="precio">9 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Hamburguesa Lasarte
+                           Hamburguesa de ternera, tomate, queso cheddar , mermelada de panceta y bacon crujiente, mayonesa
+                        </h3>
+                        <p class="precio">12 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Doble-Smash
+                           Doble hamburguesa Smash de ternera, con salsa carbonara, queso cheddar y guanciale
+                        </h3>
+                        <p class="precio">12 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Hamburguesa doble
+                            Doble hamburguesa de ternera con queso, salsa cheddar y bacon
+                        </h3>
+                        <p class="precio">12 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Hamburguesa Veggie
+                           Hamburguesa de verduras, con queso de cabra, mermelada de tomate y espinacas
+                        </h3>
+                        <p class="precio">12 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Hamburguesa de pollo
+                           Pollo crujiente glaseado con kimchee, queso cheddar, cebolla encurtida y lechuga con mayonesa
+                        </h3>
+                        <p class="precio">12 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Hot Dogs</h2>
+                <div class="platos hotdog">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Clásico
+                            Salchicha con ketchup, mayonesa y patatas paja en pan brioche
+                        </h3>
+                        <p class="precio">10 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Arima Dog
+                            Salchicha envuelta en bacon con salsa cheddar, ketchup, cebolla crujiente y pepinillos en pan brioche
+                        </h3>
+                        <p class="precio">10 €</p>
+                    </div>
+                </div>
+                <h2 class="menu-titulo">Postres</h2>
+                <div class="platos postres grid-menu">
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Cremoso de queso con miga de galleta y fresa
+                        </h3>
+                        <p class="precio">6 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Brownie de cacahuete con helado de caramelo salado
+                        </h3>
+                        <p class="precio">6 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Crepe con nutella y helado de vainilla
+                        </h3>
+                        <p class="precio">7 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                           Piña asada, con helado de coco y toffee de lima y ron
+                        </h3>
+                        <p class="precio">7 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Tiramisú de matcha y chocolate blanco
+                        </h3>
+                        <p class="precio">7 €</p>
+                    </div>
+                    <div class="plato">
+                        <h3 class="titulo">
+                            Cookie recién hecha, con helado de vainilla y toffee
+                        </h3>
+                        <p class="precio">6 €</p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
+    <footer>
+        <p>
+            &copy; 2022 ARIMA TABERNA. Osina kalea 4, Zabaleta Berri auzoa, Lasarte-Oria, 20160
+        </p>
+    </footer>
 </body>
 </html>
