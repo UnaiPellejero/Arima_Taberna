@@ -1,0 +1,188 @@
+/* 1. ESTILOS GENERALES Y RESET */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Josefin Sans, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: #ffffff;
+    color: var(--color-arima);
+}
+
+/* 2. HEADER Y NAVEGACIÓN (FLEXBOX) */
+header {
+    background-color: #fff;
+    padding: 10px 5%;
+    border-bottom: 1px solid #eee;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo ajustado al tamaño del texto */
+.logo img {
+    height: 50px; /* Tamaño similar a la línea de texto del menú */
+    display: block;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    gap: 70px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #555;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--color-arima);
+}
+
+/* Estilo Reservar: Grisáceo con poca opacidad del color del footer */
+.btn-nav {
+    background-color: var(--color-arima-suave) !important; 
+    color: var(--color-arima) !important;
+    padding: 10px 20px;
+    border: 1px solid #2c3e50;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.btn-nav:hover {
+    background-color:var(--color-arima) !important;
+    color: #fff !important;
+}
+
+/* 3. CONTENEDOR Y FORMULARIO (FLEXBOX) */
+.container {
+    max-width: 600px;
+    margin: 140px auto;
+    padding: 40px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    
+}
+
+fieldset {
+    border: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+legend {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: var(--color-arima);
+}
+
+label {
+    font-weight: 600;
+}
+
+input, textarea {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: var(--color-arima);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #1a252f;
+}
+
+/* 4. FOOTER (GRID) */
+footer {
+    background-color: transparent;
+    color: var(--color-arima);
+    padding: 60px 5% 30px 5%;
+    margin-top: 50px;
+    text-align: center;
+    border-top: 1px solid #eee; /*esto es la linea*/
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
+    gap: 40px;
+}
+
+.footer-section h3 {
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-section p, .footer-section a {
+    color: #666;
+    text-decoration: none;
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 150px;
+    border-radius: 12px;
+    margin-top: 15px;
+    filter: grayscale(0.2);
+}
+
+.social-links {
+    display: flex;
+    gap: 20px;
+    justify-content: center;;
+    font-size: 24px;
+}
+
+.social-links a {
+    color: var(--color-arima);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    font-size: 13px;
+    color: #999;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr; /* Una columna en móviles */
+    }
+    .navbar {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+:root {
+    /* El marrón del logo */
+    --color-arima: #2a2522; 
+    --color-arima-suave: rgba(42, 37, 34, 0.1); /* Marrón con baja opacidad */
+}
