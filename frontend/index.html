@@ -8,25 +8,15 @@
     <title>Inicio</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <img src="utils/img/-7.webp" href="index.html" alt="logo del restaurante">
-            <ul>
-                <li class="nav-item" href="index.html">Inicio</li>
-                <li class="nav-item" href="quienes_somos.html">Quienes Somos</li>
-                <li class="nav-item" href="contacto.html">Contacto</li>
-                <li class="nav-item" href="reservas.html">Reservas</li>
-            </ul>
-        </nav>
-    </header>
+     <main-navbar></main-navbar>
     <main>
         <h1 class="inicio-titulo">Inicio</h1>
-        <div id="reservas">Reservas</div>
-        <div id="menu">
+        <section id="reservas">Reservas</section>
+        <section id="menu">
             <h2>Menú</h2>
             <div id="platos">
                 <h2 class="menu-titulo">Desayunos</h2>
-                <div class="platos tostadas grid-menu" id="tostadas">
+                <section class="platos tostadas grid-menu" id="tostadas">
                     <div class="plato">
                         <h3 class="titulo">
                             Mantequilla y mermelada
@@ -75,7 +65,7 @@
                         </h3>
                         <p class="precio">4 €</p>
                     </div>
-                </div>
+                </section>
                 <h2 class="menu-titulo">Arima Bol</h2>
                 <div class="platos bol">
                     <div class="plato">
@@ -423,12 +413,14 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
     <footer>
         <p>
             &copy; 2022 ARIMA TABERNA. Osina kalea 4, Zabaleta Berri auzoa, Lasarte-Oria, 20160
         </p>
     </footer>
+    <script type="module" src="Navbar.js"></script>
+    <script type="module" src="Footer.js"></script>
 </body>
 </html>
