@@ -6,25 +6,14 @@
     <title>Contacto</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="contacto.css">
+      <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image.png" sizes="32x32" href="../frontend/imagenes/Arima_Logo.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../frontend/imagenes/Arima_Logo.png">
     <link rel="mask-icon" href="../frontend/imagenes/Arima_Logo.svg" color="#2a2522">
 </head>
 
 <body>
-    <header>
-    <nav class="navbar">
-        <div class="logo">
-            <img src="../frontend/imagenes/Arima_Logo.webp" alt="Logo Arima Taberna">
-        </div>
-        <ul class="nav-links">
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">Quiénes Somos</a></li>
-            <li><a href="#">Contacto</a></li>
-            <li><a href="#" class="btn-nav">Reservar</a></li>
-        </ul>
-    </nav>
-    </header>
+    <main-navbar></main-navbar>
 
     <div class="container">
         <form action="#" method="POST">
@@ -48,38 +37,8 @@
         </form>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Nuestra Ubicación</h3>
-                <p>Osina kalea 4, Zabaleta Berri auzoa, Lasarte-Oria, 20160</p>
-                <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2171.344902566362!2d-2.0141056821024903!3d43.27023448528147!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd51b106003978af%3A0x268ca7871c20f097!2sArima%20Taberna!5e0!3m2!1ses!2ses!4v1768380402612!5m2!1ses!2ses" 
-                    width="600" height="450" title="Mapa Arima Taberna" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
-            </div>
-
-            <div class="footer-section">
-                <h3>Contacto</h3>
-                <p><strong>Teléfono:</strong> +34 000 000 000</p>
-                <p><strong>Email:</strong> <a href="mailto: arima@arimataberna.eus">arima@arimataberna.eus</a></p>
-                <p><strong>Abierto todos los días</strong></p>
-            </div>
-
-            <div class="footer-section">
-                <h3>Síguenos</h3>
-                <div class="social-links">
-                    <a href="https://www.facebook.com/people/Arima-Gastrotaberna/100088189659183/" target="_blank"><i class="fab fa-facebook"></i></a>
-                    <a href="https://www.instagram.com/arimataberna/" target="_blank"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            &copy; 2022 Arima Taberna. Todos los derechos reservados.
-        </div>
-    </footer>
-
+   <index-footer></index-footer>
+    <script type="module" src="Navbar.js"></script>
+        <script type="module" src="Footer.js"></script>
 </body>
 </html>

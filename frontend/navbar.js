@@ -1,18 +1,20 @@
 class Navbar extends HTMLElement {
     connectedCallback() {
-        this.innerHTML = `
+       this.innerHTML = `
         <header>
-            <nav>
+            <nav class="navbar-container">
                 <div class="logo">
                     <a href="index.html">
-                        <img src="utils/img/Logo sin fondo.png" alt="logo del restaurante">
+                        <img src="utils/img/Logo sin fondo.png" alt="logo">
                     </a>
                 </div>
-                <ul>
+                <ul class="nav-list">
                     <li class="nav-item"><a href="index.html">Inicio</a></li>
                     <li class="nav-item"><a href="aboutus.html">Quienes somos</a></li>
                     <li class="nav-item"><a href="contacto.html">Contacto</a></li>
-                    <li class="nav-item"><a href="reservas.html">Reservas</a></li>
+                    <li class="nav-item">
+                        <a href="index.html#reservas" class="btn-reserva">Reservas</a>
+                    </li>
                 </ul>
             </nav>
         </header>

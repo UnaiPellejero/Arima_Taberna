@@ -6,66 +6,15 @@
 }
 
 body {
-    font-family: Josefin Sans, sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
     background-color: #ffffff;
     color: var(--color-arima);
 }
 
 /* 2. HEADER Y NAVEGACIÓN (FLEXBOX) */
-header {
-    background-color: #fff;
-    padding: 10px 5%;
-    border-bottom: 1px solid #eee;
-}
 
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+/* Logo ajustado al tamaño del texto *
 
-/* Logo ajustado al tamaño del texto */
-.logo img {
-    height: 50px; /* Tamaño similar a la línea de texto del menú */
-    display: block;
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    align-items: center;
-    gap: 70px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #555;
-    font-size: 16px;
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: var(--color-arima);
-}
-
-/* Estilo Reservar: Grisáceo con poca opacidad del color del footer */
-.btn-nav {
-    background-color: var(--color-arima-suave) !important; 
-    color: var(--color-arima) !important;
-    padding: 10px 20px;
-    border: 1px solid #2c3e50;
-    border-radius: 4px;
-    transition: 0.3s;
-}
-
-.btn-nav:hover {
-    background-color:var(--color-arima) !important;
-    color: #fff !important;
-}
-
+/*
 /* 3. CONTENEDOR Y FORMULARIO (FLEXBOX) */
 .container {
     max-width: 600px;
@@ -73,6 +22,7 @@ header {
     padding: 40px;
     border: 1px solid #eee;
     border-radius: 8px;
+    box-shadow: #2a252233 2px 4px 5px;
     
 }
 
