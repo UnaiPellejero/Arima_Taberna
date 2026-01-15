@@ -41,6 +41,11 @@ header img {
     height: auto;
     margin-left: 20px;
 }
+img {
+    max-width: 100%;
+    height: auto;
+    margin: 2px;
+}
 nav {
     display: flex;
     justify-content: space-between;
@@ -138,6 +143,11 @@ span {
     margin-bottom: 0;
     border-bottom: solid 1px #e0e0e0;
     padding-bottom: 5px;
+}
+.img-plato {
+    max-width: 100%;
+    box-shadow: 2px 2px 15px rgba(87, 87, 87, 0.719);
+    margin: 10px 0 20px 0 ;
 }
 .titulo {
     font-family: var(--fuente-titulos);

@@ -5,7 +5,7 @@ class Navbar extends HTMLElement {
             <nav>
                 <div class="logo">
                     <a href="index.html">
-                        <img src="utils/img/-7.webp" alt="logo del restaurante">
+                        <img src="utils/img/Logo sin fondo.png" alt="logo del restaurante">
                     </a>
                 </div>
                 <ul>
