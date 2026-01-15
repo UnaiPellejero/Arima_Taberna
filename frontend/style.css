@@ -168,10 +168,26 @@ span {
     border-bottom: solid 1px #e0e0e0;
     padding-bottom: 5px;
 }
+@media (max-width: 768px) {
+    section.grid-menu, 
+    div.grid-menu {
+        grid-template-columns: 1fr !important; /* Una sola columna en pantallas pequeñas */
+    }
+}
+.img-contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
 .img-plato {
     max-width: 100%;
     box-shadow: 2px 2px 15px rgba(87, 87, 87, 0.719);
     margin: 10px 0 20px 0 ;
+}
+.img-plato:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
 }
 .titulo {
     font-family: var(--fuente-titulos);
