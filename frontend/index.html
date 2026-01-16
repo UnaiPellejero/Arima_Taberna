@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="shortcut icon" href="utils/img/Logo sin fondo.png" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="contacto.css">
+    <link rel="shortcut icon" href="../utils/img/Logo sin fondo.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/contacto.css">
     <title>Inicio</title>
 </head>
 <body>
     <main-navbar></main-navbar>
     <main>
-        <h1 class="inicio-titulo">Inicio</h1>
-        <section id="reservas">Reservas</section>
+        <h1 data-i18n="inicio.titulo" class="inicio-titulo">Inicio</h1>
+        <section data-i18n="reservas.reservas" id="reservas">Reservas</section>
         <section id="menu">
-            <h2>Menú</h2>
+            <h2 data-i18n="menu.menu">Menú</h2>
             <div id="platos">
-                <h2 class="menu-titulo">Desayunos</h2>
+                <h2 data-i18n="menu.categoria" class="menu-titulo">Desayunos</h2>
                 <div class="img-contenedor">
                     <img class="img-plato" src="utils/img/Desayuno.png" alt="desayuno">
                 </div>
@@ -454,7 +454,9 @@
         </section>
     </main>
     <index-footer></index-footer>
-    <script type="module" src="Navbar.js"></script>
-    <script type="module" src="Footer.js"></script>
+    <script src="js/i18n.js"></script>
+
+    <script type="module" src="./js/navbar.js"></script>
+    <script type="module" src="./js/footer.js"></script>
 </body>
 </html>
