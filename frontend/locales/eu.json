@@ -83,6 +83,27 @@
     "plato58": "Anana errea, koko-izozkia eta lima/ron-toffearekin",
     "plato59": "Cookie egin berria, banilla eta toffe izozkiarekin"
   },
+  "somos": {
+      "historia-titulo": "Nortzuk Gara",
+      "historia": {
+        "p1": "Arima Taberna urte askotako esperientzia duen ostalaritzako eta  profesionalen diziplina anitzeko talde batek osatzen dugu.",
+        "p2": "Atseginak gara, arduratsu eta bezeroarekin abegikor.   Gure lanaz gozatzen dugu."
+      },
+      "titulo-servicio": "Gure zerbitzua",
+      "servicio": "Zabaleta Berri auzoan kokatuta, parke eder eta zabal batera irekita dagoen taberna  da Arima, erlaxatzera eta prestatzen ditugun gauza goxoez gozatzera etortzeko leku ezin hobea.",
+      "titulo-grupo": "Gure taldea eta misioa",
+      "grupo": "Gure helburua da gure bezeroen gogobetetasuna erabat asetzea eta gure eskaintzaz goza dezaten lortzea, zerbitzu bikaina eta kalitatezko produktuak eskainiz. Pertsonen eguneroko bizitzan parte hartzea eta auzogintzan laguntzea.",
+      "frase": "Beti zure esanetara, Arima Taldea"
+    },
+    "contacto": {
+      "contacto-titulo": "Kontakturako inprimakia",
+      "nombre": "Izen osoa",
+      "email": "Helbide elektronikoa",
+      "fecha": "Data",
+      "mensaje": "Mezua",
+      "placeholder": "¿Zertan lagun zaitazkegu?",
+      "enviar": "Bidali"
+    },
   "footer": {
     "contacto": "Kontaktua",
     "telefono": "Telefonoa",
@@ -90,6 +111,7 @@
     "abierto": "Egunero irekita",
     "ubicacion": "Gure kokapena",
     "direccion": "Osina kalea 4, Zabaleta Berri auzoa, Lasarte-Oria, 20160",
+    "siguenos": "Jarrai Gaitzazu",
     "derechos": "© 2022 Arima Taberna. Eskubide guztiak erreserbatuta."
   }
 }

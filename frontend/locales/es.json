@@ -86,6 +86,27 @@
         "plato58": "Piña asada, con helado de coco y toffee de lima y ron",
         "plato59": "Cookie recién hecha, con helado de vainilla y toffee"
     },
+    "somos": {
+      "historia-titulo": "Nuestra Historia",
+      "historia": {
+        "p1": "Bienvenido a nuestra taberna. Desde nuestra apertura, nos hemos dedicado a ofrecer las mejores tostadas y snacks con ingredientes de proximidad y un ambiente acogedor.",
+        "p2": "Nuestra pasión por la gastronomía se refleja en cada plato que servimos, combinando tradición y modernidad en un solo lugar."
+      },
+      "titulo-servicio": "Nuestro Servicio",
+      "servicio": "Situado en el barrio Zabaleta Berri, Arima es un Gastrobar abierto a un bello y amplio parque, un lugar ideal para venir a relajarse y disfrutar de nuestra carta.",
+      "titulo-grupo": "Nuestro grupo y misión",
+      "grupo": "Nuestra misión es satisfacer plenamente las expectativas de nuestro clientes y conseguir que disfruten de nuestra oferta, brindándoles un excelente servicio y productos de calidad. Participar en la vida cotidiana de las personas y contribuir a la activación de la vida social del barrio.",
+      "frase": "A tu disposición, Arima Taldea"
+    },
+    "contacto": {
+      "contacto-titulo": "Formulario de contacto",
+      "nombre": "Nombre Completo",
+      "email": "Correo Electrónico",
+      "fecha": "Fecha de Consulta",
+      "mensaje": "Mensaje",
+      "placeholder": "¿En qué podemos ayudarte?",
+      "enviar": "Enviar Solicitud"
+    },
     "footer": {
       "contacto": "Contacto",
       "telefono": "Teléfono",
@@ -93,6 +114,7 @@
       "abierto": "Abierto todos los días",
       "ubicacion": "Nuestra Ubicación",
       "direccion": "Osina kalea 4, Zabaleta Berri auzoa, Lasarte-Oria, 20160",
+      "siguenos": "Síguenos",
       "derechos": "© 2022 Arima Taberna. Todos los derechos reservados."
     }
 }
