@@ -1,4 +1,9 @@
 {
+  "head": {
+    "inicio": "Hasiera | Arima Taldea",
+    "somos":"Nor gara | Arima Taldea",
+    "contacto": "Kontaktua | Arima Taldea"
+  },
   "nav": {
     "inicio": "Hasiera",
     "somos": "Nor gara",
