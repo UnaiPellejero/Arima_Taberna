@@ -1,6 +1,6 @@
 class Navbar extends HTMLElement {
     connectedCallback() {
-       this.innerHTML = `
+        this.innerHTML = `
         <header>
             <nav class="navbar-container">
                 <div class="logo">
@@ -10,21 +10,25 @@ class Navbar extends HTMLElement {
                 </div>
                 
                 <ul class="nav-list">
-                <li class="nav-item"><a href="index.html">Inicio</a></li>
-                <li class="nav-item"><a href="aboutus.html">Quienes somos</a></li>
-                <li class="nav-item"><a href="contacto.html">Contacto</a></li>
-                <li class="nav-item">
-                    <a href="index.html#reservas" class="btn-reserva">Reservas</a>
-                </li>
-                <div class="lang-switcher">
-                    <button onclick="i18n.load('es')">ES</button>
-                    <button onclick="i18n.load('eu')">EU</button>
-                </div>
+                    <li class="nav-item"><a href="index.html" data-i18n="nav.inicio">Inicio</a></li>
+                    <li class="nav-item"><a href="aboutus.html" data-i18n="nav.somos">Quienes somos</a></li>
+                    <li class="nav-item"><a href="contacto.html" data-i18n="nav.contacto">Contacto</a></li>
+                    <li class="nav-item">
+                        <a href="index.html#reservas" data-i18n="nav.reservas" class="btn-reserva">Reservas</a>
+                    </li>
+                    <div class="lang-switcher">
+                        <button onclick="i18n.load('es')">ES</button>
+                        <button onclick="i18n.load('eu')">EU</button>
+                    </div>
                 </ul>
             </nav>
         </header>
         `;
-        if(window.i18n) i18n.translatePage();
+
+        // REGLA DE ORO: Si el traductor existe, traduce este componente ahora mismo
+        if (window.i18n && i18n.translations && Object.keys(i18n.translations).length > 0) {
+            i18n.translatePage();
+        }
     }
 }
 

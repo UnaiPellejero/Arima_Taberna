@@ -1,40 +1,46 @@
 const i18n = {
-    // Idiomas soportados
     translations: {},
     currentLang: localStorage.getItem('selectedLang') || 'es',
 
-    // Cargar archivos JSON
     async load(lang) {
         this.currentLang = lang;
         localStorage.setItem('selectedLang', lang);
-        const response = await fetch(`./locales/${lang}.json`);
-        this.translations = await response.json();
-        this.translatePage();
-        document.documentElement.lang = lang; // Cambia <html lang="...">
+        try {
+            const response = await fetch(`./locales/${lang}.json`);
+            this.translations = await response.json();
+            this.translatePage();
+            document.dispatchEvent(new CustomEvent('languageChanged'));
+            document.documentElement.lang = lang;
+        } catch (error) {
+            console.error("Error cargando idioma:", error);
+        }
     },
 
-    // Buscar elementos con el atributo data-i18n
     translatePage() {
         const elements = document.querySelectorAll('[data-i18n]');
         elements.forEach(el => {
             const key = el.getAttribute('data-i18n');
-            const translation = this.getNestedValue(this.translations, key);
+            const translation = key.split('.').reduce((obj, i) => (obj ? obj[i] : null), this.translations);
+            
             if (translation) {
-                // Si es un input con placeholder, traducimos el placeholder
-                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                    el.placeholder = translation;
+                // Si el elemento es un botón o un enlace, buscamos su nodo de texto
+                // para no cargarle el HTML y romper los eventos.
+                if (el.childNodes.length > 0) {
+                    // Buscamos el primer nodo de tipo texto
+                    let textNode = Array.from(el.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+                    if (textNode) {
+                        textNode.textContent = translation;
+                    } else {
+                        // Si no hay nodo de texto (está vacío), lo creamos
+                        el.textContent = translation;
+                    }
                 } else {
-                    el.innerHTML = translation;
+                    el.textContent = translation;
                 }
             }
         });
-    },
-
-    // Función auxiliar para leer claves anidadas como "nav.inicio"
-    getNestedValue(obj, path) {
-        return path.split('.').reduce((prev, curr) => prev ? prev[curr] : null, obj);
     }
 };
 
-// Inicializar al cargar la página
+window.i18n = i18n;
 document.addEventListener('DOMContentLoaded', () => i18n.load(i18n.currentLang));
