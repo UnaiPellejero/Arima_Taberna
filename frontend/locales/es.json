@@ -96,8 +96,19 @@
       "servicio": "Situado en el barrio Zabaleta Berri, Arima es un Gastrobar abierto a un bello y amplio parque, un lugar ideal para venir a relajarse y disfrutar de nuestra carta.",
       "titulo-grupo": "Nuestro grupo y misión",
       "grupo": "Nuestra misión es satisfacer plenamente las expectativas de nuestro clientes y conseguir que disfruten de nuestra oferta, brindándoles un excelente servicio y productos de calidad. Participar en la vida cotidiana de las personas y contribuir a la activación de la vida social del barrio.",
-      "frase": "A tu disposición, Arima Taldea"
-    },
+      "frase": "A tu disposición, Arima Taldea",
+      "detalles": {
+      "t1": "Para el desayuno",
+      "st1": "Desayunos saludables",
+      "p1": "Disponemos de gran variedad de desayunos, para que empieces el día con energía. Elige el que más te guste y el que más te convenga",
+      "t2": "Para disfrutar de nuestro menú",
+      "st2": "Undécimo, almuerzo o cena",
+      "p2": "Después de tu paseo diario, de tu vuelta al monte o simplemente para recuperar fuerzas, aquí tendrás la ocasión de almorzar o cenar.",
+      "t3": "Allí o en casa",
+      "st3": "Pedidos y reservas",
+      "p3": "Tanto como si quieres gozar de nuestra carta con nosotros como si quieres llevar tu pedido a casa, llámanos: 604 88 04 24"
+    }
+  },
     "contacto": {
       "contacto-titulo": "Formulario de contacto",
       "nombre": "Nombre Completo",

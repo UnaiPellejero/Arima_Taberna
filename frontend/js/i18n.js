@@ -23,15 +23,17 @@ const i18n = {
             const translation = key.split('.').reduce((obj, i) => (obj ? obj[i] : null), this.translations);
             
             if (translation) {
-                // Si el elemento es un botón o un enlace, buscamos su nodo de texto
-                // para no cargarle el HTML y romper los eventos.
+                
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = translation;
+                    return; 
+                }
+
                 if (el.childNodes.length > 0) {
-                    // Buscamos el primer nodo de tipo texto
                     let textNode = Array.from(el.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
                     if (textNode) {
                         textNode.textContent = translation;
                     } else {
-                        // Si no hay nodo de texto (está vacío), lo creamos
                         el.textContent = translation;
                     }
                 } else {

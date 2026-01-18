@@ -98,8 +98,19 @@
       "servicio": "Zabaleta Berri auzoan kokatuta, parke eder eta zabal batera irekita dagoen taberna  da Arima, erlaxatzera eta prestatzen ditugun gauza goxoez gozatzera etortzeko leku ezin hobea.",
       "titulo-grupo": "Gure taldea eta misioa",
       "grupo": "Gure helburua da gure bezeroen gogobetetasuna erabat asetzea eta gure eskaintzaz goza dezaten lortzea, zerbitzu bikaina eta kalitatezko produktuak eskainiz. Pertsonen eguneroko bizitzan parte hartzea eta auzogintzan laguntzea.",
-      "frase": "Beti zure esanetara, Arima Taldea"
-    },
+      "frase": "Beti zure esanetara, Arima Taldea",
+      "detalles": {
+      "t1": "Gosaltzeko",
+      "st1": "Gosari  osasuntsuak",
+      "p1": "Gosari ugari ditugu, eguna indarrarekin hasteko. Aukera guztien artean  hautatu gustokoen eta egokien ikusten duzun hori.",
+      "t2": "Gure menuaz gozatzeko",
+      "st2": "Hamaiketakoa, bazkaria edo afaria",
+      "p2": "Zure eguneroko ibilialdia egin ondoren, asteburuko mendibueltaren ondoren edo besterik gabe, indarrak berreskuratzeko aitzakian,  hemen izango duzu jateko edo afaltzeko aukera. Etorri eta aztertu gure eskaintza.  ",
+      "t3": "Bertan edo etxean",
+      "st3": "Bertarako edo etxerako, eskatu, gau eta edun",
+      "p3": "Gure menuaz gurekin gozatu nahi baduzu edo zure  eskariak Ariman jaso eta zure etxera eramatea nahiago  baduzu, deitu eta gustura hartatuko zaitugu.  Erretserbak  egiteko zein eskariak egiteko, gure telefonoa beti prest: 604 88 04 24"
+    }
+  },
     "contacto": {
       "contacto-titulo": "Kontakturako inprimakia",
       "nombre": "Izen osoa",
@@ -109,14 +120,14 @@
       "placeholder": "¿Zertan lagun zaitazkegu?",
       "enviar": "Bidali"
     },
-  "footer": {
-    "contacto": "Kontaktua",
-    "telefono": "Telefonoa",
-    "email": "Email",
-    "abierto": "Egunero irekita",
-    "ubicacion": "Gure kokapena",
-    "direccion": "Osina kalea 4, Zabaleta Berri auzoa, Lasarte-Oria, 20160",
-    "siguenos": "Jarrai Gaitzazu",
-    "derechos": "© 2022 Arima Taberna. Eskubide guztiak erreserbatuta."
+    "footer": {
+      "contacto": "Kontaktua",
+      "telefono": "Telefonoa",
+      "email": "Email",
+      "abierto": "Egunero irekita",
+      "ubicacion": "Gure kokapena",
+      "direccion": "Osina kalea 4, Zabaleta Berri auzoa, Lasarte-Oria, 20160",
+      "siguenos": "Jarrai Gaitzazu",
+      "derechos": "© 2022 Arima Taberna. Eskubide guztiak erreserbatuta."
+    }
   }
-}
