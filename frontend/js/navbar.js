@@ -24,8 +24,7 @@ class Navbar extends HTMLElement {
             </nav>
         </header>
         `;
-
-        // REGLA DE ORO: Si el traductor existe, traduce este componente ahora mismo
+        
         if (window.i18n && i18n.translations && Object.keys(i18n.translations).length > 0) {
             i18n.translatePage();
         }
