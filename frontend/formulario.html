@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva - Arima Taberna</title>
+    
+    <!-- LIBRERÍA FLATPICKR - Calendario siempre visible -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="formulario.css">
+  <script src="js/formulario.js"></script>
+</head>
+
+<body>
+    
+    <!-- CONTENEDOR: SOLO FORMULARIO -->
+    <div class="contenedor">
+        
+        <!-- =======================================
+             COLUMNA 1: CALENDARIO
+             ======================================= -->
+        <div class="columna-calendario">
+            <h3>📅 Selecciona Fecha</h3>
+            <input type="text" id="calendario-visible">
+            <input type="hidden" id="fecha-hidden" name="fecha">
+        </div>
+        
+        <!-- =======================================
+             COLUMNA 2: FORMULARIO
+             ======================================= -->
+        <div class="columna-formulario">
+            <h3>Completa tu Reserva</h3>
+            
+            <div class="fecha-seleccionada" id="fecha-display">
+                📅 Selecciona una fecha →
+            </div>
+            
+            <form action="procesar-reserva.php" method="POST" id="form-reserva">
+                
+                <!-- ÚNICA FILA: Hora, Personas, Comentarios -->
+                <div class="fila-formulario">
+                    <div class="campo">
+                        <label>Hora *</label>
+                        <select id="hora" name="hora" required>
+                            <option value="">--:--</option>
+                            <option value="12:00">12:00</option>
+                            <option value="12:30">12:30</option>
+                            <option value="13:00">13:00</option>
+                            <option value="13:30">13:30</option>
+                            <option value="14:00">14:00</option>
+                            <option value="14:30">14:30</option>
+                            <option value="15:00">15:00</option>
+                            <option value="20:00">20:00</option>
+                            <option value="20:30">20:30</option>
+                            <option value="21:00">21:00</option>
+                            <option value="21:30">21:30</option>
+                            <option value="22:00">22:00</option>
+                            <option value="22:30">22:30</option>
+                        </select>
+                    </div>
+                    
+                    <div class="campo">
+                        <label>Personas *</label>
+                        <select id="personas" name="personas" required>
+                            <option value="">-</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                    </div>
+                    
+                    <div class="campo campo-comentarios">
+                        <label>Comentarios (opcional)</label>
+                        <textarea id="comentarios" name="comentarios" placeholder="Alergias, preferencias..."></textarea>
+                    </div>
+                </div>
+                
+                <!-- FILA FINAL: Checkbox y Botones -->
+                <div class="fila-final">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="privacidad" name="privacidad" required>
+                        <label for="privacidad">Acepto la política de privacidad *</label>
+                    </div>
+                    
+                    <div class="grupo-botones">
+                        <button type="reset" class="boton-secundario">Limpiar</button>
+                        <button type="submit" class="boton-principal">Reservar Mesa</button>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+        
+    </div>
+    
+    <!-- LIBRERÍA FLATPICKR -->
+   
+    
+</body>
+</html>
