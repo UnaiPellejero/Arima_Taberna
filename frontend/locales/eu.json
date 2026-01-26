@@ -12,7 +12,17 @@
   },
   "inicio": {
     "titulo": "Hasiera",
-    "reservas": "Erreserbak"
+    "reservas": "Erreserbak",
+    "selecciona-fecha": "Aukeratu Data",
+    "selecciona_fecha": "📅 Aukeratu Data →",
+    "dia_seleccionado": "📅 <strong>{dia} {mes} {año}</strong>",
+    "hora": "Ordua",
+    "personas": "Pertsona kopurua",
+    "comentarios": "Iruzkinak(aukerakoa)",
+    "preferencias": "Alergiak, lehentasunak…",
+    "privacidad": "Pribatutasun politika onartzen dut*",
+    "limpiar": "Garbitu",
+    "reservar": "Erreserbatu mahaia"
   },
   "menu": {
     "menu": "KARTA",
@@ -45,7 +55,7 @@
     "plato23": "Barazkitxoak tenpuran",
     "plato24": "Patata minak",
     "plato25": "Oilasko fingers-ak, BBQ saltsarekin",
-    "plato26": "Natxoak bolognesa saltsarekin(oilar-mokoa, cheddar saltsa, guakamole eta bolognesa saltsa)",
+    "plato26": "Natxoak bolognesa saltsarekin( oilar-mokoa, cheddar saltsa, guakamole eta bolognesa saltsa )",
     "categoria5": "Entsaladak",
     "plato27": "Gure Poke (sojarekin eta zitrikoekin ondutako izokin marinatua, arroza, edamame, wakame-alga, cherry-tomateak eta mangoa siratxa-maionesarekin)",
     "plato28": "Entsalada mistoa ( euskal letxuga, tomatea hegaluzea, arraultza egosia, tipuleta eta esparragoak)",
@@ -108,7 +118,10 @@
       "p2": "Zure eguneroko ibilialdia egin ondoren, asteburuko mendibueltaren ondoren edo besterik gabe, indarrak berreskuratzeko aitzakian,  hemen izango duzu jateko edo afaltzeko aukera. Etorri eta aztertu gure eskaintza.  ",
       "t3": "Bertan edo etxean",
       "st3": "Bertarako edo etxerako, eskatu, gau eta edun",
-      "p3": "Gure menuaz gurekin gozatu nahi baduzu edo zure  eskariak Ariman jaso eta zure etxera eramatea nahiago  baduzu, deitu eta gustura hartatuko zaitugu.  Erretserbak  egiteko zein eskariak egiteko, gure telefonoa beti prest: 604 88 04 24"
+      "p3": "Gure menuaz gurekin gozatu nahi baduzu edo zure  eskariak Ariman jaso eta zure etxera eramatea nahiago  baduzu, deitu eta gustura hartatuko zaitugu.  Erretserbak  egiteko zein eskariak egiteko, gure telefonoa beti prest: 604 88 04 24",
+      "t4": "Lantalde profesionala",
+      "st4": "Gure balio nagusia",
+      "p4": "Sinetsita gaude dena harmonian ibiltzearen sekretua ez dagoela teknikan soilik, gurekin egunero daudenen giza talentuan eta dedikazioan baizik. Haien pasioa eta konpromisoa dira beti onena eskaintzea eta etxean bezala sentiaraztea ahalbidetzen digutenak."
     }
   },
     "contacto": {
@@ -117,7 +130,7 @@
       "email": "Helbide elektronikoa",
       "fecha": "Data",
       "mensaje": "Mezua",
-      "placeholder": "¿Zertan lagun zaitazkegu?",
+      "placeholder": "¿Zertan lagun zaitzakegu?",
       "enviar": "Bidali"
     },
     "footer": {

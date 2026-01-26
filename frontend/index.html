@@ -2,6 +2,9 @@
 <html lang="es">
 <head>
     <script src="js/i18n.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/white.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -9,6 +12,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/contacto.css">
     <title data-i18n="head.inicio">Inicio | Arima Taberna</title>
+
 </head>
 <body>
     <main-navbar></main-navbar>
@@ -16,7 +20,68 @@
     <main class="main-index">
         <h1 data-i18n="inicio.titulo" class="inicio-titulo">Inicio</h1>
         <section id="reservas" class="reserva-container">
-            <h2 data-i18n="inicio.reservas">Reservas</h2>
+            <div class="columna-calendario">
+                <h3 data-i18n="inicio.selecciona-fecha">📅 Selecciona Fecha</h3>
+                <input type="text" id="calendario-visible">
+                <input type="hidden" id="fecha-hidden" name="fecha">
+            </div>
+            <div class="columna-formulario">
+                <h3 data-i18n="inicio.reservas">Completa tu Reserva</h3>
+                <div data-i18n="inicio.selecciona_fecha" class="fecha-seleccionada" id="fecha-display">
+                    📅 Selecciona una fecha →
+                </div>
+                <form action="procesar-reserva.php" method="POST" id="form-reserva">
+                    <div class="fila-formulario">
+                        <div class="campo">
+                            <label data-i18n="inicio.hora">Hora *</label>
+                            <select id="hora" name="hora" required>
+                                <option value="">--:--</option>
+                                <option value="12:00">12:00</option>
+                                <option value="12:30">12:30</option>
+                                <option value="13:00">13:00</option>
+                                <option value="13:30">13:30</option>
+                                <option value="14:00">14:00</option>
+                                <option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option>
+                                <option value="20:00">20:00</option>
+                                <option value="20:30">20:30</option>
+                                <option value="21:00">21:00</option>
+                                <option value="21:30">21:30</option>
+                                <option value="22:00">22:00</option>
+                                <option value="22:30">22:30</option>
+                            </select>
+                        </div>
+                        <div class="campo">
+                            <label data-i18n="inicio.personas">Personas *</label>
+                            <select id="personas" name="personas" required>
+                                <option value="">-</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                            </select>
+                        </div>
+                        <div class="campo campo-comentarios">
+                            <label data-i18n="inicio.comentarios">Comentarios (opcional)</label>
+                            <textarea data-i18n="inicio.preferencias" id="comentarios" name="comentarios" placeholder="Alergias, preferencias..."></textarea>
+                        </div>
+                    </div>
+                    <div class="fila-final">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="privacidad" name="privacidad" required>
+                            <label for="privacidad" data-i18n="inicio.privacidad">Acepto la política de privacidad *</label>
+                        </div>
+                        <div class="grupo-botones">
+                            <button type="reset" class="boton-secundario buttons" data-i18n="inicio.limpiar">Limpiar</button>
+                            <button type="submit" class="boton-principal buttons" data-i18n="inicio.reservar">Reservar Mesa</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </section>
         <div class="verMas-container">
             <a href="#menu" class="ver-mas-link">
@@ -114,5 +179,84 @@
 
     <script type="module" src="./js/navbar.js"></script>
     <script type="module" src="./js/footer.js"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/eu.js"></script>
+   <script>
+    let calendario;
+
+    // Centralizamos la lógica de pintar la fecha seleccionada
+    function actualizarFechaDisplay(fecha) {
+        if (!fecha) {
+            // Si no hay fecha, buscamos el texto de "Selecciona una fecha"
+            const textoDefault = "inicio.selecciona-fecha".split('.').reduce((obj, i) => (obj ? obj[i] : null), i18n.translations);
+            document.getElementById('fecha-display').innerHTML = `📅 ${textoDefault || 'Selecciona una fecha →'}`;
+            return;
+        }
+
+        const lang = i18n.currentLang;
+        const locales = { 'es': 'es-ES', 'eu': 'eu-ES' };
+        
+        const dia = fecha.getDate();
+        // toLocaleDateString traduce el mes automáticamente
+        const mes = fecha.toLocaleDateString(locales[lang] || 'es-ES', { month: 'short' });
+        const año = fecha.getFullYear();
+
+        document.getElementById('fecha-display').innerHTML = 
+            `📅 <strong>${dia} ${mes.replace('.', '')} ${año}</strong>`;
+    }
+
+    function initCalendario(lang) {
+        if (calendario) calendario.destroy();
+
+        calendario = flatpickr("#calendario-visible", {
+            locale: lang === 'es' ? 'es' : 'eu',
+            inline: true,
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            onChange: function(selectedDates, dateStr) {
+                document.getElementById('fecha-hidden').value = dateStr;
+                if (selectedDates.length > 0) {
+                    actualizarFechaDisplay(selectedDates[0]);
+                }
+            }
+        });
+    }
+
+    // Escuchar el evento de cambio de idioma de i18n.js
+    document.addEventListener('languageChanged', () => {
+        const lang = i18n.currentLang;
+        
+        // 1. Reiniciamos el calendario (para traducir días de la semana y meses internos)
+        initCalendario(lang);
+        
+        // 2. Actualizamos el texto visual de la fecha elegida
+        if (calendario.selectedDates.length > 0) {
+            actualizarFechaDisplay(calendario.selectedDates[0]);
+        } else {
+            actualizarFechaDisplay(null);
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // El i18n.load ya se ejecuta en i18n.js, aquí solo iniciamos el calendario
+        initCalendario(i18n.currentLang || 'es');
+    });
+
+    // Validación del formulario
+    document.getElementById('form-reserva').addEventListener('submit', function(e) {
+        if (!document.getElementById('fecha-hidden').value) {
+            e.preventDefault();
+            const msg = i18n.currentLang === 'es' ? 'Por favor, selecciona una fecha' : 'Mesedez, hautatu data bat';
+            alert(msg);
+        }
+    });
+
+    // Botón Limpiar
+    document.querySelector('.boton-secundario').addEventListener('click', function() {
+        calendario.clear();
+        document.getElementById('fecha-hidden').value = "";
+        actualizarFechaDisplay(null);
+    });
+</script>
 </body>
 </html>

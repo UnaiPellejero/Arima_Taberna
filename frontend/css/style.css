@@ -287,20 +287,217 @@ h2 {
 }
 
 #reservas {
+    width: 100%;
+    height: 1100px;
     grid-area: reserva;
-    display: flex;
-    font-size: 24px;
     color: var(--color-gris-claro);
-    margin-bottom: 2px;
     text-align: center;
     justify-content: center;
     cursor: pointer;
     transition: color 0.3s ease;
-    border: solid 2px var(--color-gris-claro);
-    height: 28vw;
     align-items: center;
 }
+.reserva-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+    padding: 12px 15px;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 15px;
+    max-height: 400px;
+}
+.columna-calendario {
+    border-right: 1px solid #eae4dc;
+    padding-right: 10px;
+}
+.columna-calendario h3 {
+    font-size: 18px;
+    color: var(--color-gris-claro);
+    text-align: center;
+}
 
+#fecha-hidden {
+    display: none;
+}
+#calendario-visible {
+    width: 100%;
+}
+.columna-formulario {
+    display: flex;
+    flex-direction: column;
+}
+.columna-formulario h3 {
+    font-size: 18px;
+    color: --var(--color-gris-claro);
+    margin-bottom: 6px;
+}
+.fecha-seleccionada {
+    background-color: var(--color-arima-suave);
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--color-arima);
+    border: 1px solid var(--color-arima);
+    font-size: 16px;
+}
+.fila-formulario {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+}
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea {
+    width: 100%;
+    padding: 5px 6px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    transition: border-color 0.3s;
+}
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #8b7355;
+    outline: none;
+}
+.campo-comentarios {
+    grid-column: span 2;
+}
+#comentarios {
+    min-height: 70px;
+    max-height: 35px;
+    resize: none;
+}
+.fila-final {
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 9px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.checkbox-group input {
+    width: 13px;
+    height: 13px;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+.checkbox-group label {
+    margin-bottom: 5px;
+    font-weight: normal;
+    cursor: pointer;
+    font-size: 12px;
+    text-transform: none;
+}
+.grupo-botones {
+    display: flex;
+    gap: 6px;
+}
+.buttons {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+.boton-principal {
+    background-color: var(--color-gris-claro);
+    color: white;
+}
+.boton-principal:hover {
+    background-color: var(--color-destacado);
+    transform: translateY(-1px);
+}
+.boton-secundario {
+    background-color: white;
+    color: var(--color-gris-claro);
+    border: 1px solid var(--color-arima);
+}
+.boton-secundario:hover {
+    background-color: var(--color-destacado);
+}
+.flatpickr-calendar {
+    width: 100% !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    border: none !important;
+}
+.flatpickr-months {
+    height: 40px !important; 
+}
+
+.flatpickr-current-month {
+    font-size: 12px !important;
+    height: 24px !important;
+    line-height: 24px !important;
+    padding: 0 !important;
+}
+
+.flatpickr-monthDropdown-months {
+    font-size: 11px !important;
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+    width: 20px !important;
+    height: 20px !important;
+    padding: 3px !important;
+}
+
+.flatpickr-weekdays {
+    height: 20px !important;
+    margin-top: 2px !important;
+}
+
+.flatpickr-weekday {
+    font-size: 9px !important;
+    height: 20px !important;
+    line-height: 20px !important;
+}
+
+.flatpickr-days {
+    padding: 0 !important;
+}
+
+.flatpickr-day {
+    height: 26px !important;
+    line-height: 26px !important;
+    max-width: 26px !important;
+    font-size: 10px !important;
+    margin: 0 !important;
+}
+
+.flatpickr-day.selected, 
+.flatpickr-day.selected:hover {
+    background-color: var(--color-arima) !important;
+    border-color: var(--color-destacado) !important;
+    color: rgb(12, 10, 10) !important;
+}
+
+.flatpickr-day:hover {
+    background-color: var(--color-arima-suave) !important;
+}
+span.flatpickr-weekday {
+    color: var(--color-gris-claro) !important;
+    font-weight: bold;
+}
 .btn-reserva {
     background-color: var(--color-arima-suave) !important; 
     color: var(--color-arima) !important;
@@ -309,7 +506,6 @@ h2 {
     border-radius: 4px;
     transition: 0.3s;
 }
-
 .btn-reserva:hover {
     background-color:var(--color-arima) !important;
     color: #fff !important;
@@ -353,7 +549,6 @@ h2 {
     box-shadow: 2px 2px 15px rgba(87, 87, 87, 0.719);
     margin: 10px 0 20px 0 ;
 }
-
 .img-plato:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;
@@ -439,3 +634,53 @@ h2 {
         display: none;
     }
 }
+@media (max-width: 1200px) {
+            .reserva-container {
+                max-width: 100%;
+                grid-template-columns: 240px 1fr;
+                gap: 12px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .reserva-container {
+                grid-template-columns: 1fr;
+                max-height: none;
+                padding: 10px;
+            }
+            
+            .columna-calendario {
+                border-right: none;
+                border-bottom: 1px solid #eae4dc;
+                padding-right: 0;
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .fila-formulario {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .fila-final {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .grupo-botones {
+                width: 100%;
+            }
+            
+            button {
+                flex: 1;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+            
+            .fila-formulario {
+                grid-template-columns: 1fr;
+            }
+        }

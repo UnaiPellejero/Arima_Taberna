@@ -34,6 +34,7 @@ function renderMenu() {
     if (window.translatePage) {
         window.translatePage();
     }
+    
 }
 
 document.addEventListener('DOMContentLoaded', renderMenu);
