@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="js/i18n.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="head.contacto">Contacto | Arima Taberna</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/contacto.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image.png" sizes="32x32" href="../frontend/imagenes/Arima_Logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../frontend/imagenes/Arima_Logo.png">
+    <link rel="shortcut icon" href="utils/img/Logo sin fondo.png" type="image/x-icon">
+</head>
+
+<body>
+    <main-navbar></main-navbar>
+
+    <div class="container">
+        <form action="#" method="POST">
+            <fieldset>
+                <legend data-i18n="contacto.contacto-titulo">Formulario de Contacto</legend>
+
+                <label data-i18n="contacto.nombre" for="nombre">Nombre Completo</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ej. Juan Pérez" required>
+
+                <label data-i18n="contacto.email" for="email">Correo Electrónico</label>
+                <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+
+                <label data-i18n="contacto.fecha" for="fecha">Fecha de la Consulta</label>
+                <input type="date" id="fecha" name="fecha" required>
+
+                <label data-i18n="contacto.mensaje" for="mensaje">Mensaje</label>
+                <textarea data-i18n="contacto.placeholder" id="mensaje" name="mensaje" rows="5" placeholder="¿En qué podemos ayudarte?" required></textarea>
+
+                <button data-i18n="contacto.enviar" type="submit">Enviar Solicitud</button>
+            </fieldset>
+        </form>
+    </div>
+
+    <index-footer></index-footer>
+
+    <script type="module" src="./js/navbar.js"></script>
+    <script type="module" src="./js/footer.js"></script>
+</body>
+</html>
