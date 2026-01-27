@@ -3,21 +3,32 @@
     "inicio": "Inicio",
     "somos": "Quiénes somos",
     "contacto": "Contacto",
-    "reservas": "Reservas"
+    "reservas": "Reservas",
+    "login": "Iniciar sesión",
+    "contraseña": "Contraseña",
+    "entrar": "Entrar",
+    "registro": "Registrarse",
+    "nombre": "Nombre Completo *",
+    "crear": "Crear Cuenta"
+
   },
   "inicio": {
     "titulo": "Inicio",
     "reservas": "Reservas",
     "selecciona-fecha": "Selecciona Fecha",
-    "selecciona_fecha": "📅 Selecciona una fecha →",
-    "dia_seleccionado": "📅 <strong>{dia} {mes} {año}</strong>",
+    "selecciona_fecha": "Selecciona una fecha →",
+    "dia_seleccionado": "<strong>{dia} {mes} {año}</strong>",
     "hora": "Hora",
     "personas": "Personas",
+    "nombre": "Nombre *",
+    "telefono": "Teléfono *",
     "comentarios": "Comentario(opcional)",
     "preferencias": "Alergias, preferencias…",
     "privacidad": "Acepto la política de privacidad*",
     "limpiar": "Limpiar",
-    "reservar": "Reservar mesa"
+    "reservar": "Reservar mesa",
+    "reserva_enviada": "Reserva enviada",
+    "bienvenida": "Bienvenido a Arima Taberna"
   },
   "reservas": {
     "reservas": "Reservas"

@@ -8,21 +8,31 @@
     "inicio": "Hasiera",
     "somos": "Nortzuk gara",
     "contacto": "Kontaktua",
-    "reservas": "Erreserbak"
+    "reservas": "Erreserbak",
+    "login": "Saioa hasi",
+    "contraseña": "Pasahitza",
+    "entrar": "Sartu",
+    "registro": "Erregistratu",
+    "nombre": "Izen Osoa *",
+    "crear": "Kontua sortu"
   },
   "inicio": {
     "titulo": "Hasiera",
     "reservas": "Erreserbak",
     "selecciona-fecha": "Aukeratu Data",
-    "selecciona_fecha": "📅 Aukeratu Data →",
-    "dia_seleccionado": "📅 <strong>{dia} {mes} {año}</strong>",
+    "selecciona_fecha": "Aukeratu Data →",
+    "dia_seleccionado": "<strong>{dia} {mes} {año}</strong>",
     "hora": "Ordua",
     "personas": "Pertsona kopurua",
+    "nombre": "Izena *",
+    "telefono": "Telefonoa *",
     "comentarios": "Iruzkinak(aukerakoa)",
     "preferencias": "Alergiak, lehentasunak…",
     "privacidad": "Pribatutasun politika onartzen dut*",
     "limpiar": "Garbitu",
-    "reservar": "Erreserbatu mahaia"
+    "reservar": "Erreserbatu mahaia",
+    "reserva_enviada": "Erreserba bidalia",
+    "bienvenida": "Ongietorri Arima Tabernara"
   },
   "menu": {
     "menu": "KARTA",
