@@ -37,7 +37,10 @@ public class App {
     String pass = req.queryParams("password");
     
     // Nueva consulta para obtener todos los datos del usuario
-    String sql = "SELECT id, usuario, email, telefono, tipo FROM Arima_BD.usuarios WHERE (usuario = ? OR email = ?) AND contrasena = ?";
+    String sql = "SELECT u.id, u.usuario, u.email, u.telefono, u.tipo, e.rol \n" + //
+                "FROM Arima_BD.usuarios u \n" + //
+                "LEFT JOIN Arima_BD.empleados e ON u.id = e.id_empleado \n" + //
+                "WHERE (u.usuario = ? OR u.email = ?) AND u.contrasena = ?";
     
     try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
          PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -137,9 +140,11 @@ public class App {
     private static boolean registrarUsuario(String usuario, String email, String contrasena, String telefono, int tipo) {
     String sqlUser = "INSERT INTO Arima_BD.usuarios (usuario, email, contrasena, telefono, tipo) VALUES (?, ?, ?, ?, ?)";
     String sqlCliente = "INSERT INTO Arima_BD.clientes (id_cliente, nombre_completo, telefono, email) VALUES (?, ?, ?, ?)";
+    // Nueva SQL para la tabla empleados
+    String sqlEmpleado = "INSERT INTO Arima_BD.empleados (id_empleado, nombre, rol) VALUES (?, ?, ?)";
 
     try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-        conn.setAutoCommit(false); // Empezamos transacción para que se hagan las dos o ninguna
+        conn.setAutoCommit(false); 
 
         try (PreparedStatement psUser = conn.prepareStatement(sqlUser, PreparedStatement.RETURN_GENERATED_KEYS)) {
             psUser.setString(1, usuario);
@@ -149,26 +154,34 @@ public class App {
             psUser.setInt(5, tipo);
             psUser.executeUpdate();
 
-            // Obtenemos el ID generado
             ResultSet rs = psUser.getGeneratedKeys();
             if (rs.next()) {
                 int idGenerado = rs.getInt(1);
 
-                // Si es un cliente, lo registramos en la tabla clientes
-                if (tipo == 2) {
+                // --- Lógica según el tipo de usuario ---
+                if (tipo == 2) { 
+                    // Caso CLIENTE
                     try (PreparedStatement psCli = conn.prepareStatement(sqlCliente)) {
                         psCli.setInt(1, idGenerado);
-                        psCli.setString(2, usuario); // Usamos el nombre de usuario como nombre completo inicial
+                        psCli.setString(2, usuario); 
                         psCli.setString(3, telefono);
                         psCli.setString(4, email);
                         psCli.executeUpdate();
                     }
+                } else if (tipo == 1) { 
+                    // Caso EMPLEADO
+                    try (PreparedStatement psEmp = conn.prepareStatement(sqlEmpleado)) {
+                        psEmp.setInt(1, idGenerado);
+                        psEmp.setString(2, usuario); // Usamos el username como nombre
+                        psEmp.setString(3, "Staff");  // Rol por defecto, puedes cambiarlo según necesites
+                        psEmp.executeUpdate();
+                    }
                 }
             }
-            conn.commit(); // Guardamos cambios
+            conn.commit(); 
             return true;
         } catch (SQLException e) {
-            conn.rollback(); // Si algo falla, deshacemos todo
+            conn.rollback(); 
             e.printStackTrace();
             return false;
         }
