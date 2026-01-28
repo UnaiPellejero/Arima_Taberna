@@ -43,7 +43,6 @@ public class App {
         
         try (ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
-                // GUARDAMOS TODO EN LA SESIÓN
                 req.session().attribute("user_id", rs.getInt("id"));
                 req.session().attribute("user_nombre", rs.getString("usuario"));
                 req.session().attribute("user_email", rs.getString("email"));
