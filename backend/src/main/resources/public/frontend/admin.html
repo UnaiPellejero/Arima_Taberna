@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Arima Taberna</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="contacto.css">
+    <link rel="icon" type="image.png" sizes="32x32" href="../frontend/imagenes/Arima_Logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../frontend/imagenes/Arima_Logo.png">
+    <link rel="shortcut icon" href="utils/img/Logo sin fondo.png" type="image/x-icon">
+</head>
+<body>
+
+    <main-navbar></main-navbar>
+
+    <main class="admin-container">
+        <section class="admin-card">
+            <div class="admin-header">
+                <h2>Gestión de Reservas</h2>
+
+                <div class="header-tools">
+                    <div class="search-box">
+                        <input type="text" placeholder="Buscar por nombre o ID..." id="searchInput">
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre y Apellidos</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Fecha y Hora</th>
+                            <th>Pax</th>
+                            <th>Comentarios</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>101</td>
+                            <td>Juan Pérez</td>
+                            <td>juan.perez@email.com</td>
+                            <td>600123456</td>
+                            <td>2026-03-15 20:30</td>
+                            <td>4</td>
+                            <td>Mesa ventana</td>
+                            <td><span class="status status-confirm">Confirmada</span></td>
+                            <td class="actions">
+                                <button type="button" class="btn-edit">Editar</button>
+                                <button type="button" class="btn-delete">Eliminar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>102</td>
+                            <td>Ana López</td>
+                            <td>ana.lopez@email.com</td>
+                            <td>612987654</td>
+                            <td>2026-03-16 21:00</td>
+                            <td>2</td>
+                            <td>Aniversario</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td class="actions">
+                                <button type="button" class="btn-edit">Editar</button>
+                                <button type="button" class="btn-delete">Eliminar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>101</td>
+                            <td>Juan Pérez</td>
+                            <td>juan.perez@email.com</td>
+                            <td>600123456</td>
+                            <td>2026-03-15 20:30</td>
+                            <td>4</td>
+                            <td>Mesa ventana</td>
+                            <td><span class="status status-refused">Rechazado</span></td>
+                            <td class="actions">
+                                <button type="button" class="btn-edit">Editar</button>
+                                <button type="button" class="btn-delete">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+<div id="reservationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Editar Reserva</h3>
+            <span class="close-modal">&times;</span>
+        </div>
+        <form id="reservationForm">
+            <input type="hidden" id="resId">
+            <div class="form-group">
+                <label>Nombre y Apellidos</label>
+                <input type="text" id="resNombre" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="resEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="resTel" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Fecha y Hora</label>
+                    <input type="datetime-local" id="resFecha" required>
+                </div>
+                <div class="form-group">
+                    <label>Pax</label>
+                    <input type="number" id="resPax" min="1" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Comentarios</label>
+                <textarea id="resComentarios" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn-save">Actualizar Datos</button>
+        </form>
+    </div>
+</div>
+
+    <script src="js/admin.js"></script>
+    <script type="module" src="./js/navbar.js"></script>
+</body>
+</html>
