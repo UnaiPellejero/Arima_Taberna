@@ -181,6 +181,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    fetch('/api/usuario-actual')
+    .then(res => res.json())
+    .then(user => {
+        if (user.nombre) {
+            document.querySelector('[name="nombre"]').value = user.nombre;
+            document.querySelector('[name="telefono"]').value = user.telefono;
+            // Si tienes un campo email, también podrías rellenarlo
+        }
+    });
 
     // Cerrar modal al hacer clic fuera
     if (cerrarModal) {
