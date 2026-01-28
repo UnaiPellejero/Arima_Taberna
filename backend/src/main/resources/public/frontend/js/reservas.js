@@ -89,31 +89,49 @@ document.addEventListener('DOMContentLoaded', () => {
     const cerrarModal = document.getElementById('cerrar-modal');
 
     if (formReserva) {
-        formReserva.addEventListener('submit', function(e) {
+        formReserva.addEventListener('submit', async function(e) {
             e.preventDefault();
-            if (!document.getElementById('fecha-hidden').value) {
+
+            // Validar que se haya seleccionado una fecha en el calendario
+            const fechaVal = document.getElementById('fecha-hidden').value;
+            if (!fechaVal) {
                 const msg = i18n.currentLang === 'es' ? 'Por favor, selecciona una fecha' : 'Mesedez, hautatu data bat';
                 alert(msg);
                 return;
             }
-            const fechaVal = document.getElementById('fecha-hidden').value;
-            const horaVal = document.getElementById('hora').value;
-            const nombreVal = document.getElementById('nombre').value;
-            const detalleMsg = i18n.currentLang === 'es' 
-                ? `Confirmada reserva para el ${fechaVal} a las ${horaVal}, a nombre de ${nombreVal}.`
-                : `Erreserba berretsia ${fechaVal}(e)rako ${horaVal}(e)tan, ${nombreVal}(r)en.`;
-            
-            document.getElementById('modal-detalle-reserva').innerText = detalleMsg;
-            modalConfirm.classList.add('active');
-        });
-    }
 
-    if (cerrarModal) {
-        cerrarModal.addEventListener('click', () => {
-            modalConfirm.classList.remove('active');
-            formReserva.reset();
-            calendario.clear();
-            actualizarFechaDisplay(null);
+            // Capturamos todos los datos del formulario
+            const formData = new FormData(formReserva);
+            const params = new URLSearchParams(formData);
+
+            try {
+                // Enviamos la petición al backend (App.java)
+                const response = await fetch('/reservar', {
+                    method: 'POST',
+                    body: params
+                });
+
+                const result = await response.text();
+
+                if (result === "success") {
+                    // Preparamos el mensaje de confirmación
+                    const horaVal = document.getElementById('hora').value;
+                    const nombreVal = document.getElementById('nombre').value;
+                    const detalleMsg = i18n.currentLang === 'es' 
+                        ? `Confirmada reserva para el ${fechaVal} a las ${horaVal}, a nombre de ${nombreVal}.`
+                        : `Erreserba berretsia ${fechaVal}(e)rako ${horaVal}(e)tan, ${nombreVal}(r)en.`;
+                    
+                    document.getElementById('modal-detalle-reserva').innerText = detalleMsg;
+                    
+                    // Mostramos el modal de éxito
+                    modalConfirm.classList.add('active');
+                } else {
+                    alert(i18n.currentLang === 'es' ? "Error al procesar la reserva" : "Errorea erreserba egitean");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error de conexión con el servidor");
+            }
         });
     }
 
@@ -165,11 +183,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Cerrar modal al hacer clic fuera
-    window.addEventListener('click', (e) => {
-        if (e.target === modalAuth) {
-            modalAuth.style.display = 'none';
+    if (cerrarModal) {
+            cerrarModal.addEventListener('click', () => {
+                modalConfirm.classList.remove('active');
+                formReserva.reset(); // Limpia campos de texto
+                calendario.clear();   // Limpia el calendario flatpickr
+                actualizarFechaDisplay(null); // Resetea el texto visual de la fecha
+            });
         }
-    });
 
     // Exponer funciones necesarias globalmente
     window.verTab = verTab;

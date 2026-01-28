@@ -25,7 +25,6 @@
             <div class="columna-calendario">
                 <h3 data-i18n="inicio.selecciona-fecha">📅 Selecciona Fecha</h3>
                 <input type="text" id="calendario-visible">
-                <input type="hidden" id="fecha-hidden" name="fecha">
             </div>
             <div class="columna-formulario">
                 <h3 data-i18n="inicio.reservas">Completa tu Reserva</h3>
@@ -33,6 +32,7 @@
                     📅 Selecciona una fecha →
                 </div>
                 <form action="procesar-reserva.php" method="POST" id="form-reserva">
+                    <input type="hidden" id="fecha-hidden" name="fecha">
                     <div class="fila-formulario">
                         <div class="campo">
                             <label data-i18n="inicio.hora">Hora *</label>

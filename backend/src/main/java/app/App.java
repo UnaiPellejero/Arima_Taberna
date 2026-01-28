@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static spark.Spark.*;
+import static spark.Spark.get;
+import static spark.Spark.port;
+import static spark.Spark.post;
+import static spark.Spark.staticFiles;
 
 public class App {
     private static final String DB_URL = "jdbc:mysql://34.230.190.133:3306/Arima_BD?useSSL=false&serverTimezone=UTC";
@@ -51,7 +54,34 @@ public class App {
             return exito ? "success" : "error";
         });
 
-        System.out.println("¡Servidor de Arima Taberna funcionando en http://localhost:4568!");
+        // --- RUTA PARA PROCESAR RESERVAS ---
+        post("/reservar", (req, res) -> {
+    try {
+        String fecha = req.queryParams("fecha");
+        String hora = req.queryParams("hora");
+        String personasStr = req.queryParams("personas");
+        String nombre = req.queryParams("nombre");
+        String telefono = req.queryParams("telefono");
+        String comentarios = req.queryParams("comentarios");
+
+        // Depuración: Ver en consola qué llega del formulario
+        System.out.println("Intento de reserva: " + nombre + " para el " + fecha);
+
+        if (personasStr == null || personasStr.isEmpty()) {
+            return "error";
+        }
+
+        int personas = Integer.parseInt(personasStr);
+        boolean exito = registrarReserva(fecha, hora, personas, nombre, telefono, comentarios);
+        
+        return exito ? "success" : "error";
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "error";
+    }
+});
+
+        System.out.println("Servidor de Arima Taberna funcionando en http://localhost:4568");
     }
 
     // --- MÉTODOS SQL ---
@@ -88,4 +118,22 @@ public class App {
             return false; 
         }
     }
+
+    // --- MÉTODO RESERVAR ACTUALIZADO ---
+    private static boolean registrarReserva(String fecha, String hora, int personas, String nombre, String telefono, String comentarios) {
+    String sql = "INSERT INTO Arima_BD.reservas (fecha, hora, personas, nombre, telefono, comentarios) VALUES (?, ?, ?, ?, ?, ?)";
+    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, fecha);
+        ps.setString(2, hora);
+        ps.setInt(3, personas);
+        ps.setString(4, nombre);
+        ps.setString(5, telefono);
+        ps.setString(6, comentarios);
+        return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.err.println("Error al reservar: " + e.getMessage());
+        return false;
+    }
+}
 }
