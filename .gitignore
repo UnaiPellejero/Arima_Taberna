@@ -1,0 +1,12 @@
+# Configuración sensible
+config.properties
+.env
+
+# Archivos de compilación
+target/
+*.class
+
+# Archivos de IDE
+.idea/
+.vscode/
+*.iml

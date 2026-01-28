@@ -1,10 +1,12 @@
 package app;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import static spark.Spark.get;
 import static spark.Spark.port;
@@ -12,15 +14,17 @@ import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 public class App {
-    private static final String DB_URL = "jdbc:mysql://34.230.190.133:3306/Arima_BD?useSSL=false&serverTimezone=UTC";
-    private static final String DB_USER = "Admin_Arima";
-    private static final String DB_PASS = "2025Nazaret2026";
+    private static String DB_URL;
+    private static String DB_USER;
+    private static String DB_PASS;
 
     public static void main(String[] args) {
-        port(4568); 
+
+        cargarConfiguracion(); 
 
         // Configuración de archivos estáticos
         staticFiles.location("public/frontend");
+        port(4568);
         
         get("/", (req, res) -> {
             res.redirect("/index.html");
@@ -194,6 +198,19 @@ public class App {
     } catch (SQLException e) {
         e.printStackTrace();
         return false;
+    }
+}
+
+private static void cargarConfiguracion() {
+    Properties prop = new Properties();
+    try (FileInputStream fis = new FileInputStream("config.properties")) {
+        prop.load(fis);
+        DB_URL = prop.getProperty("db.url");
+        DB_USER = prop.getProperty("db.user");
+        DB_PASS = prop.getProperty("db.pass");
+    } catch (Exception e) {
+        System.err.println("No se pudo cargar el archivo de configuración.");
+        e.printStackTrace();
     }
 }
 }
