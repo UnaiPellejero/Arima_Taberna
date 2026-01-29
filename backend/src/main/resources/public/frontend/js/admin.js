@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         params.append('fechaHora', document.getElementById('resFecha').value);
         params.append('pax', document.getElementById('resPax').value);
         params.append('comentarios', document.getElementById('resComentarios').value);
+        params.append('idMesa', document.getElementById('resMesa').value);
 
         const res = await fetch('/api/admin/reservas/actualizar', { method: 'POST', body: params });
         if (await res.text() === "success") {
@@ -54,6 +55,7 @@ function cargarReservas() {
                         <td>${res.pax}</td>
                         <td>${res.comentarios || ''}</td>
                         <td><span class="status ${estadoClass}">${res.estado}</span></td>
+                        <td>${res.idMesa || 'Sin asignar'}</td>
                         <td class="actions">
                             <button type="button" class="btn-edit" onclick='abrirEditar(${JSON.stringify(res)})'>Editar</button>
                         </td>
@@ -71,5 +73,6 @@ function abrirEditar(reserva) {
     document.getElementById('resFecha').value = reserva.fechaHora.replace(' ', 'T');
     document.getElementById('resPax').value = reserva.pax;
     document.getElementById('resComentarios').value = reserva.comentarios;
+    document.getElementById('resMesa').value = reserva.idMesa;
     document.getElementById('reservationModal').style.display = "block";
 }

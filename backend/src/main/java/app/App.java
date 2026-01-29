@@ -105,7 +105,7 @@ post("/reservar", (req, res) -> {
     );
 });
 post("/api/admin/reservas/actualizar", (req, res) -> {
-    String sql = "UPDATE Arima_BD.reservas SET nombre=?, telefono=?, fecha=?, hora=?, personas=?, comentarios=? WHERE id_reserva=?";
+    String sql = "UPDATE Arima_BD.reservas SET nombre=?, telefono=?, fecha=?, hora=?, personas=?, comentarios=? id_mesa=? WHERE id_reserva=?";
     
     // Separamos fecha y hora (vienen como T desde el input datetime-local)
     String[] parts = req.queryParams("fechaHora").split("T"); 
@@ -118,7 +118,8 @@ post("/api/admin/reservas/actualizar", (req, res) -> {
         ps.setString(4, parts[1]);
         ps.setInt(5, Integer.parseInt(req.queryParams("pax")));
         ps.setString(6, req.queryParams("comentarios"));
-        ps.setInt(7, Integer.parseInt(req.queryParams("id")));
+        ps.setInt(7, Integer.parseInt(req.queryParams("idMesa")));
+        ps.setInt(8, Integer.parseInt(req.queryParams("id")));
         
         return ps.executeUpdate() > 0 ? "success" : "error";
     } catch (Exception e) { e.printStackTrace(); return "error"; }
@@ -129,7 +130,7 @@ post("/api/admin/reservas/actualizar", (req, res) -> {
     StringBuilder json = new StringBuilder("[");
     
     // Consulta para traer los datos reales de la reserva + email del cliente
-    String sql = "SELECT r.id, r.nombre, u.email, r.telefono, r.fecha, r.hora, r.personas, r.comentarios, r.estado " +
+    String sql = "SELECT r.id, r.nombre, u.email, r.telefono, r.fecha, r.hora, r.personas, r.comentarios, r.estado, r.id_mesa " +
              "FROM Arima_BD.reservas r " +
              "LEFT JOIN Arima_BD.usuarios u ON r.id_cliente = u.id";
 
@@ -140,11 +141,12 @@ post("/api/admin/reservas/actualizar", (req, res) -> {
         while (rs.next()) {
             if (json.length() > 1) json.append(",");
             json.append(String.format(
-                "{\"id\":%d, \"nombre\":\"%s\", \"email\":\"%s\", \"tel\":\"%s\", \"fechaHora\":\"%s %s\", \"pax\":%d, \"comentarios\":\"%s\", \"estado\":\"%s\"}",
+                "{\"id\":%d, \"nombre\":\"%s\", \"email\":\"%s\", \"tel\":\"%s\", \"fechaHora\":\"%s %s\", \"pax\":%d, \"comentarios\":\"%s\", \"estado\":\"%s\", \"idMesa\":%d}",
                 rs.getInt("id"), rs.getString("nombre"), 
                 rs.getString("email") != null ? rs.getString("email") : "N/A",
                 rs.getString("telefono"), rs.getString("fecha"), rs.getString("hora"),
-                rs.getInt("personas"), rs.getString("comentarios"), rs.getString("estado")
+                rs.getInt("personas"), rs.getString("comentarios"), rs.getString("estado"),
+                rs.getInt("id_mesa")
             ));
         }
     } catch (SQLException e) { e.printStackTrace(); }
