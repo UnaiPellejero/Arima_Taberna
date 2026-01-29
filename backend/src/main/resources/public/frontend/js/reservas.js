@@ -154,33 +154,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Petición de Login al Backend (Spark Java)
     if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(loginForm);
-            const params = new URLSearchParams(formData);
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(loginForm);
+        const params = new URLSearchParams(formData);
 
-            try {
-                const response = await fetch('/login-auth', {
-                    method: 'POST',
-                    body: params
-                });
+        try {
+            const response = await fetch('/login-auth', {
+                method: 'POST',
+                body: params
+            });
 
-                const result = await response.text();
+            const result = await response.text();
 
-                if (result === "success") {
-                    mostrarMensajeAuth("¡Login con éxito! Bienvenido.", "verde", loginForm);
-                    setTimeout(() => {
-                        window.location.href = "/index.html"; 
-                    }, 1500);
-                } else {
-                    mostrarMensajeAuth("Usuario o contraseña incorrectos", "rojo", loginForm);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                mostrarMensajeAuth("Error de conexión con el servidor", "rojo", loginForm);
+            // Ahora 'result' puede ser "1" (Admin), "2" (Cliente) o "error"
+            if (result === "1") {
+                mostrarMensajeAuth("¡Bienvenido, Administrador!", "verde", loginForm);
+                setTimeout(() => {
+                    window.location.href = "admin.html"; // Redirige a gestión
+                }, 1000);
+            } 
+            else if (result === "2") {
+                mostrarMensajeAuth("¡Login con éxito! Bienvenido.", "verde", loginForm);
+                setTimeout(() => {
+                    window.location.href = "index.html"; // Redirige a inicio cliente
+                }, 1000);
+            } 
+            else {
+                mostrarMensajeAuth("Usuario o contraseña incorrectos", "rojo", loginForm);
             }
-        });
-    }
+        } catch (error) {
+            console.error("Error:", error);
+            mostrarMensajeAuth("Error de conexión con el servidor", "rojo", loginForm);
+        }
+    });
+}
     fetch('/api/usuario-actual')
     .then(res => res.json())
     .then(user => {

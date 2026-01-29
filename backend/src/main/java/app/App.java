@@ -32,15 +32,12 @@ public class App {
         });
 
         // Ruta de Login (Sin cambios)
-        post("/login-auth", (req, res) -> {
+    post("/login-auth", (req, res) -> {
     String identificador = req.queryParams("email");
     String pass = req.queryParams("password");
     
-    // Nueva consulta para obtener todos los datos del usuario
-    String sql = "SELECT u.id, u.usuario, u.email, u.telefono, u.tipo, e.rol \n" + //
-                "FROM Arima_BD.usuarios u \n" + //
-                "LEFT JOIN Arima_BD.empleados e ON u.id = e.id_empleado \n" + //
-                "WHERE (u.usuario = ? OR u.email = ?) AND u.contrasena = ?";
+    String sql = "SELECT id, usuario, email, telefono, tipo FROM Arima_BD.usuarios " +
+                 "WHERE (usuario = ? OR email = ?) AND contrasena = ?";
     
     try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
          PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -50,17 +47,36 @@ public class App {
         
         try (ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
+                int tipo = rs.getInt("tipo");
                 req.session().attribute("user_id", rs.getInt("id"));
+                req.session().attribute("user_tipo", tipo);
                 req.session().attribute("user_nombre", rs.getString("usuario"));
-                req.session().attribute("user_email", rs.getString("email"));
-                req.session().attribute("user_telefono", rs.getString("telefono"));
-                return "success";
+                
+                // Enviamos el tipo al frontend para que decida la redirección
+                return String.valueOf(tipo); 
             }
         }
     } catch (SQLException e) { e.printStackTrace(); }
     
     res.status(401);
     return "error";
+});
+post("/reservar", (req, res) -> {
+    try {
+        Integer idCliente = req.session().attribute("user_id");
+        String fecha = req.queryParams("fecha");
+        String hora = req.queryParams("hora");
+        int personas = Integer.parseInt(req.queryParams("personas"));
+        String nombre = req.queryParams("nombre");
+        String telefono = req.queryParams("telefono");
+        String comentarios = req.queryParams("comentarios");
+
+        boolean exito = registrarReserva(fecha, hora, personas, nombre, telefono, comentarios, idCliente);
+        return exito ? "success" : "error";
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "error";
+    }
 });
 
         // --- RUTA DE REGISTRO ACTUALIZADA ---
@@ -88,32 +104,80 @@ public class App {
         req.session().attribute("user_telefono")
     );
 });
-        // --- RUTA PARA PROCESAR RESERVAS ---
-        post("/reservar", (req, res) -> {
-            try {
-        Integer idCliente = req.session().attribute("user_id");
-        String fecha = req.queryParams("fecha");
-        String hora = req.queryParams("hora");
-        String personasStr = req.queryParams("personas");
-        String nombre = req.queryParams("nombre");
-        String telefono = req.queryParams("telefono");
-        String comentarios = req.queryParams("comentarios");
-
-        // Depuración: Ver en consola qué llega del formulario
-        System.out.println("Intento de reserva: " + nombre + " para el " + fecha);
-
-        if (personasStr == null || personasStr.isEmpty()) {
-            return "error";
-        }
-
-        int personas = Integer.parseInt(personasStr);
-        boolean exito = registrarReserva(fecha, hora, personas, nombre, telefono, comentarios, idCliente);
+post("/api/admin/reservas/actualizar", (req, res) -> {
+    String sql = "UPDATE Arima_BD.reservas SET nombre=?, telefono=?, fecha=?, hora=?, personas=?, comentarios=? WHERE id_reserva=?";
+    
+    // Separamos fecha y hora (vienen como T desde el input datetime-local)
+    String[] parts = req.queryParams("fechaHora").split("T"); 
+    
+    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, req.queryParams("nombre"));
+        ps.setString(2, req.queryParams("tel"));
+        ps.setString(3, parts[0]);
+        ps.setString(4, parts[1]);
+        ps.setInt(5, Integer.parseInt(req.queryParams("pax")));
+        ps.setString(6, req.queryParams("comentarios"));
+        ps.setInt(7, Integer.parseInt(req.queryParams("id")));
         
-        return exito ? "success" : "error";
-    } catch (Exception e) {
+        return ps.executeUpdate() > 0 ? "success" : "error";
+    } catch (Exception e) { e.printStackTrace(); return "error"; }
+});
+        // --- RUTA PARA PROCESAR RESERVAS ---
+        get("/api/admin/reservas", (req, res) -> {
+    res.type("application/json");
+    StringBuilder json = new StringBuilder("[");
+    
+    // Consulta para traer los datos reales de la reserva + email del cliente
+    String sql = "SELECT r.id, r.nombre, u.email, r.telefono, r.fecha, r.hora, r.personas, r.comentarios, r.estado " +
+             "FROM Arima_BD.reservas r " +
+             "LEFT JOIN Arima_BD.usuarios u ON r.id_cliente = u.id";
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            if (json.length() > 1) json.append(",");
+            json.append(String.format(
+                "{\"id\":%d, \"nombre\":\"%s\", \"email\":\"%s\", \"tel\":\"%s\", \"fechaHora\":\"%s %s\", \"pax\":%d, \"comentarios\":\"%s\", \"estado\":\"%s\"}",
+                rs.getInt("id"), rs.getString("nombre"), 
+                rs.getString("email") != null ? rs.getString("email") : "N/A",
+                rs.getString("telefono"), rs.getString("fecha"), rs.getString("hora"),
+                rs.getInt("personas"), rs.getString("comentarios"), rs.getString("estado")
+            ));
+        }
+    } catch (SQLException e) { e.printStackTrace(); }
+    
+    json.append("]");
+    return json.toString();
+});
+    get("/api/ver-reservas", (req, res) -> {
+    res.type("application/json");
+    StringBuilder json = new StringBuilder("[");
+    
+    // Consulta que une reservas con clientes para tener toda la info
+    String sql = "SELECT r.id_reserva, r.fecha, r.hora, r.personas, r.nombre, r.telefono, r.comentarios, r.estado " +
+                 "FROM Arima_BD.reservas r";
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            if (json.length() > 1) json.append(",");
+            json.append(String.format(
+                "{\"id\":\"%s\", \"fecha\":\"%s\", \"hora\":\"%s\", \"personas\":%d, \"nombre\":\"%s\", \"tel\":\"%s\", \"estado\":\"%s\"}",
+                rs.getInt("id_reserva"), rs.getString("fecha"), rs.getString("hora"), 
+                rs.getInt("personas"), rs.getString("nombre"), rs.getString("telefono"), rs.getString("estado")
+            ));
+        }
+    } catch (SQLException e) {
         e.printStackTrace();
-        return "error";
     }
+    
+    json.append("]");
+    return json.toString();
 });
 
         System.out.println("Servidor de Arima Taberna funcionando en http://localhost:4568");
