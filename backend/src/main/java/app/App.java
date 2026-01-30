@@ -51,8 +51,8 @@ public class App {
                 req.session().attribute("user_id", rs.getInt("id"));
                 req.session().attribute("user_tipo", tipo);
                 req.session().attribute("user_nombre", rs.getString("usuario"));
-                req.session().attribute("user_email", rs.getString("email"));      // <--- AÑADIR ESTO
-                req.session().attribute("user_telefono", rs.getString("telefono")); // <--- AÑADIR ESTO
+                req.session().attribute("user_email", rs.getString("email"));      
+                req.session().attribute("user_telefono", rs.getString("telefono")); 
                 
                 // Enviamos el tipo al frontend para que decida la redirección
                 return String.valueOf(tipo); 
@@ -108,23 +108,39 @@ post("/reservar", (req, res) -> {
 });
 post("/api/admin/reservas/actualizar", (req, res) -> {
     // NOTA: Se añadió una coma después de comentarios=?
-    String sql = "UPDATE Arima_BD.reservas SET nombre=?, telefono=?, fecha=?, hora=?, personas=?, comentarios=?, id_mesa=? WHERE id_reserva=?";
+    String sql = "UPDATE Arima_BD.reservas SET nombre=?, telefono=?, fecha=?, hora=?, personas=?, comentarios=?, id_mesa=? WHERE id=?";
     
-    String[] parts = req.queryParams("fechaHora").split("T"); 
-    
-    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, req.queryParams("nombre"));
-        ps.setString(2, req.queryParams("tel"));
-        ps.setString(3, parts[0]);
-        ps.setString(4, parts[1]);
-        ps.setInt(5, Integer.parseInt(req.queryParams("pax")));
-        ps.setString(6, req.queryParams("comentarios"));
-        ps.setInt(7, Integer.parseInt(req.queryParams("idMesa"))); // Índice 7
-        ps.setInt(8, Integer.parseInt(req.queryParams("id")));     // Índice 8 (el WHERE)
+    int idReserva = Integer.parseInt(req.queryParams("id"));
+    int pax = Integer.parseInt(req.queryParams("pax"));
+    String[] parts = req.queryParams("fechaHora").split("T");
+    String fecha = parts[0];
+    String hora = parts[1];
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+        // 1. Buscamos una mesa adecuada para los nuevos datos
+        Integer nuevaMesa = buscarMesaDisponible(conn, fecha, hora, pax, idReserva);
         
-        return ps.executeUpdate() > 0 ? "success" : "error";
-    } catch (Exception e) { e.printStackTrace(); return "error"; }
+        if (nuevaMesa == null) {
+            return "error_no_capacity"; // No hay mesas para ese número de personas en esa hora
+        }
+
+        // 2. Ejecutamos el update con la mesa encontrada
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, req.queryParams("nombre"));
+            ps.setString(2, req.queryParams("tel"));
+            ps.setString(3, fecha);
+            ps.setString(4, hora);
+            ps.setInt(5, pax);
+            ps.setString(6, req.queryParams("comentarios"));
+            ps.setInt(7, nuevaMesa); 
+            ps.setInt(8, idReserva);
+            
+            return ps.executeUpdate() > 0 ? "success" : "error";
+        }
+    } catch (Exception e) { 
+        e.printStackTrace(); 
+        return "error"; 
+    }
 });
         // --- RUTA PARA PROCESAR RESERVAS ---
         get("/api/admin/reservas", (req, res) -> {
@@ -187,9 +203,7 @@ post("/api/admin/reservas/actualizar", (req, res) -> {
         System.out.println("Servidor de Arima Taberna funcionando en http://localhost:4568");
     }
 
-    private static Integer buscarMesaDisponible(Connection conn, String fecha, String hora, int personas) throws SQLException {
-    // Busca mesas con capacidad suficiente que NO tengan reservas 
-    // en un margen de 90 minutos antes o después.
+private static Integer buscarMesaDisponible(Connection conn, String fecha, String hora, int personas, Integer idReservaAExcluir) throws SQLException {
     String sql = 
         "SELECT id_mesa FROM Arima_BD.mesas " +
         "WHERE cantidad_personas >= ? " +
@@ -197,6 +211,7 @@ post("/api/admin/reservas/actualizar", (req, res) -> {
         "    SELECT id_mesa FROM Arima_BD.reservas " +
         "    WHERE fecha = ? " +
         "    AND ABS(TIMEDIFF(hora, ?)) < '01:30:00'" +
+        (idReservaAExcluir != null ? " AND id != ?" : "") + // Solo añade esto si hay un ID
         ") " +
         "ORDER BY cantidad_personas ASC LIMIT 1";
 
@@ -204,12 +219,16 @@ post("/api/admin/reservas/actualizar", (req, res) -> {
         ps.setInt(1, personas);
         ps.setString(2, fecha);
         ps.setString(3, hora);
+        // Si hay ID, lo asignamos al parámetro número 4
+        if (idReservaAExcluir != null) {
+            ps.setInt(4, idReservaAExcluir);
+        }
         
         try (ResultSet rs = ps.executeQuery()) {
             if (rs.next()) return rs.getInt("id_mesa");
         }
     }
-    return null; // No hay mesas disponibles
+    return null;
 }
 
     // --- MÉTODOS SQL ---
@@ -286,16 +305,14 @@ post("/api/admin/reservas/actualizar", (req, res) -> {
 
     // --- MÉTODO RESERVAR ACTUALIZADO ---
 private static boolean registrarReserva(String fecha, String hora, int personas, String nombre, String telefono, String comentarios, Integer idCliente) {
-    // Añadimos id_mesa a la consulta SQL
     String sqlInsert = "INSERT INTO Arima_BD.reservas (fecha, hora, personas, nombre, telefono, comentarios, id_cliente, id_mesa, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pendiente')";
     
     try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-        // 1. Buscamos mesa automáticamente usando el nuevo método
-        Integer mesaAsignada = buscarMesaDisponible(conn, fecha, hora, personas);
+        // CORRECCIÓN: Añadimos 'null' al final porque es una reserva nueva
+        Integer mesaAsignada = buscarMesaDisponible(conn, fecha, hora, personas, null); 
         
-        if (mesaAsignada == null) return false; // Detener si no hay sitio
+        if (mesaAsignada == null) return false;
 
-        // 2. Insertamos la reserva con la mesa encontrada
         try (PreparedStatement ps = conn.prepareStatement(sqlInsert)) {
             ps.setString(1, fecha);
             ps.setString(2, hora);
@@ -307,7 +324,7 @@ private static boolean registrarReserva(String fecha, String hora, int personas,
             if (idCliente != null) ps.setInt(7, idCliente); 
             else ps.setNull(7, java.sql.Types.INTEGER);
             
-            ps.setInt(8, mesaAsignada); // <--- Nueva columna id_mesa
+            ps.setInt(8, mesaAsignada);
             
             return ps.executeUpdate() > 0;
         }
@@ -316,7 +333,6 @@ private static boolean registrarReserva(String fecha, String hora, int personas,
         return false;
     }
 }
-
 private static void cargarConfiguracion() {
     Properties prop = new Properties();
     try (FileInputStream fis = new FileInputStream("config.properties")) {
