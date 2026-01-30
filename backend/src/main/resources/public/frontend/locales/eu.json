@@ -139,7 +139,7 @@
   },
     "contacto": {
       "contacto-titulo": "Kontakturako inprimakia",
-      "nombre": "Izen osoa",
+      "nombre": "Erabiltzailea",
       "email": "Helbide elektronikoa",
       "fecha": "Data",
       "mensaje": "Mezua",
@@ -156,5 +156,23 @@
       "direccion": "Osina kalea 4, Zabaleta Berri auzoa, Lasarte-Oria, 20160",
       "siguenos": "Jarrai Gaitzazu",
       "derechos": "© 2022 Arima Taberna. Eskubide guztiak erreserbatuta."
+    },
+    "panel": {
+      "titulo": "Erreserben kudeaketa",
+      "nombre": "Erabiltzailea",
+      "email": "Mail", 
+      "telefono": "Telefonoa",
+      "fecha": "Data eta ordua",
+      "pax": "Pax",
+      "comentarios": "Iruzkinak",
+      "estado": "Egoera",
+      "mesa": "Mahaia",
+      "acciones": "Ekintzak",
+      "placeholder3": "Bilatu izenaren edo IDaren arabera...",
+      "editar": "Editatu"
+    },
+    "modal": {
+      "titulo": "Erreserba Editatu",
+      "guardar": "ALDAKETAK GORDE"
     }
   }

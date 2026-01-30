@@ -111,7 +111,7 @@ public class App {
                     .append("<td>").append(rs.getInt("id_mesa")).append("</td>")
                     .append("<td>")
                     // El botón ahora llama a abrirModal con todos los datos
-                    .append(String.format("<button class='btn-edit' onclick=\"abrirModal(%d, '%s', '%s', '%s', %d, '%s')\">Editar</button>", 
+                    .append(String.format("<button data-i18n='panel.editar' class='btn-edit' onclick=\"abrirModal(%d, '%s', '%s', '%s', %d, '%s')\">Editar</button>", 
                             id, nombre, tel, comentarios, pax, email))
                     .append("</td>")
                     .append("</tr>");

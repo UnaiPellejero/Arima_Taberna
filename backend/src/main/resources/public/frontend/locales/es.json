@@ -153,5 +153,23 @@
       "direccion": "Osina kalea 4, Zabaleta Berri auzoa, Lasarte-Oria, 20160",
       "siguenos": "Síguenos",
       "derechos": "© 2022 Arima Taberna. Todos los derechos reservados."
+    },
+    "panel": {
+      "titulo": "Gestión de reservas",
+      "nombre": "Nombre",
+      "email": "Email", 
+      "telefono": "Teléfono",
+      "fecha": "Fecha y hora",
+      "pax": "Personas",
+      "comentarios": "Comentarios",
+      "estado": "Estado",
+      "mesa": "Mesa",
+      "acciones": "Acciones",
+      "placeholder3": "Buscar por nombre o ID...",
+      "editar": "Editar"
+    },
+    "modal": {
+      "titulo": "Editar Reserva",
+      "guardar": "GUARDAR CAMBIOS"
     }
 }

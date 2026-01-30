@@ -23,12 +23,16 @@ function actualizarFechaDisplay(fecha) {
 
 function initCalendario(lang) {
     if (calendario) calendario.destroy();
-
+    
+    const l10n = lang === 'eu' ? flatpickr.l10ns.eu : flatpickr.l10ns.es;
+    l10n.firstDayOfWeek = 1;
     calendario = flatpickr("#calendario-visible", {
         locale: lang === 'es' ? 'es' : 'eu',
-        inline: true,
+        inline: true,    // Para que esté siempre abierto
+        static: true,    // Para que se mantenga dentro de su div contenedor
         minDate: "today",
         dateFormat: "Y-m-d",
+        monthSelectorType: "static", // Evita que el selector de mes deforme el header
         onChange: function(selectedDates, dateStr) {
             document.getElementById('fecha-hidden').value = dateStr;
             if (selectedDates.length > 0) {

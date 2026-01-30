@@ -445,6 +445,7 @@ h2 {
 .reserva-container {
     max-width: 1200px;
     margin: 40px auto;
+    flex-wrap: wrap;
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -458,8 +459,22 @@ h2 {
     z-index: 1;
 }
 .columna-calendario {
-    border-right: 1px solid #eae4dc;
-    padding-right: 10px;
+    flex: 0 1 auto; /* No permite que la columna se estire infinitamente */
+    min-width: 315px; /* Ancho estándar de Flatpickr */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#wrapper-calendario .flatpickr-calendar {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 15px;
+}
+.flatpickr-day {
+    max-width: 39px !important;
+    height: 39px !important;
+    line-height: 39px !important;
 }
 .columna-calendario h3 {
     font-size: 18px;
@@ -581,70 +596,48 @@ textarea:focus {
 .boton-secundario:hover {
     background-color: var(--color-destacado);
 }
-.flatpickr-calendar {
-    width: 100% !important;
-    box-shadow: none !important;
+.columna-calendario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flatpickr-calendar.inline {
+    width: 308px !important; 
+    min-width: 308px !important;
+    max-width: 308px !important;
     background: transparent !important;
+    box-shadow: none !important;
     border: none !important;
 }
-.flatpickr-months {
-    height: 40px !important; 
-}
 
-.flatpickr-current-month {
-    font-size: 12px !important;
-    height: 24px !important;
-    line-height: 24px !important;
-    padding: 0 !important;
-}
-
-.flatpickr-monthDropdown-months {
-    font-size: 11px !important;
-}
-
-.flatpickr-prev-month,
-.flatpickr-next-month {
-    width: 20px !important;
-    height: 20px !important;
-    padding: 3px !important;
-}
-
-.flatpickr-weekdays {
-    height: 20px !important;
-    margin-top: 2px !important;
+.flatpickr-innerContainer, .flatpickr-rContainer, .flatpickr-days {
+    width: 308px !important;
 }
 
 .flatpickr-weekday {
-    font-size: 9px !important;
-    height: 20px !important;
-    line-height: 20px !important;
-}
-
-.flatpickr-days {
-    padding: 0 !important;
+    font-size: 11px !important;
+    font-weight: bold;
+    color: var(--color-gris-claro) !important;
+    width: 44px !important; 
 }
 
 .flatpickr-day {
-    height: 26px !important;
-    line-height: 26px !important;
-    max-width: 26px !important;
-    font-size: 10px !important;
+    height: 38px !important;
+    line-height: 38px !important;
+    /* Forzamos que cada celda sea exactamente 1/7 del total */
+    flex-basis: 14.2857% !important; 
+    max-width: 14.2857% !important;
+    font-size: 13px !important;
     margin: 0 !important;
+    border-radius: 6px !important;
+    box-sizing: border-box;
 }
 
-.flatpickr-day.selected, 
-.flatpickr-day.selected:hover {
+.flatpickr-day.selected {
     background-color: var(--color-arima) !important;
-    border-color: var(--color-destacado) !important;
-    color: rgb(12, 10, 10) !important;
-}
-
-.flatpickr-day:hover {
-    background-color: var(--color-arima-suave) !important;
-}
-span.flatpickr-weekday {
-    color: var(--color-gris-claro) !important;
-    font-weight: bold;
+    border-color: var(--color-arima) !important;
+    color: white !important;
 }
 .btn-reserva {
     background-color: var(--color-arima-suave) !important; 
@@ -742,34 +735,17 @@ span.flatpickr-weekday {
 @media (max-width: 1024px) {
     .main-index {
         grid-template-columns: 1fr;
-        grid-template-areas: 
-            "titulo"
-            "reserva"
-            "verMas"
-            "contenido";
+        grid-template-areas: "titulo" "reserva" "verMas" "contenido";
     }
     .sidebar { display: none; }
-    .reserva-container { grid-template-columns: 1fr; max-width: 500px; }
-    .columna-calendario { border-right: none; border-bottom: 1px solid #eee; }
+    .reserva-container { 
+        grid-template-columns: 1fr; 
+        max-width: 500px;
+        margin: 20px auto;
+    }
 }
 
 @media (max-width: 768px) {
-    nav { flex-direction: column; gap: 20px; }
-    nav ul { gap: 20px; }
-    
-    .articulos-grid {
-        grid-template-columns: 1fr;
-        padding: 0 20px;
-    }
-    
-    h2 { font-size: 32px; }
-    
     .fila-formulario { grid-template-columns: 1fr; }
-    .campo-full { grid-column: span 1; }
-}
-
-@media (max-width: 480px) {
-    .auth-container { padding: 20px; }
-    .nav-item a { font-size: 14px; }
-    .reserva-container { border-radius: 0; }
+    h2 { font-size: 32px; }
 }
