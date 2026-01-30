@@ -268,16 +268,16 @@ img.user-icon {
 .sidebar {
     grid-area: sidebar;
     position: sticky;
-    top: -15px;
+    top: 50%; 
+    transform: translateY(-50%); 
     height: fit-content;
-    padding: 80px;
+    z-index: 10;
+    padding-right: 40px;
 }
 .sidebar-bar {
     display: flex;
-    justify-content: flex-start;
     flex-direction: column;
-    border: none;
-    margin-right: -90px;
+    width: 100%;
 }
 .urlSidebar {
     list-style: none;
@@ -285,8 +285,7 @@ img.user-icon {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    list-style: none;
-    align-items: flex-end;
+    align-items: flex-end; 
 }
 .urlSidebar li a {
     text-decoration: none;
@@ -342,12 +341,7 @@ html {
 
 
 #menu {
-    grid-area: contenido;
-    margin: 0;
-    padding: 0 20px;
-}
-#menu, .reserva-container {
-    grid-area: contenido;
+    grid-area: contenido; 
 }
 
 h2 {
@@ -433,14 +427,7 @@ h2 {
 }
 
 #reservas {
-    width: 100%;
-    grid-area: reserva;
-    color: var(--color-gris-claro);
-    text-align: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    align-items: center;
+    grid-area: reserva; 
 }
 .reserva-container {
     max-width: 1200px;
@@ -683,13 +670,15 @@ textarea:focus {
 }
 
 .img-plato {
-    width: 100%;
-    max-width: 1150px;
-    height: auto;
-    object-fit: cover;
+    width: 100%;         
+    max-width: none;      
+    height: 300px;        
+    object-fit: cover;    
     box-shadow: 2px 2px 15px rgba(87, 87, 87, 0.719);
-    margin: 10px 0 20px 0 ;
+    margin: 10px 0 20px 0;
+    display: block;      
 }
+
 .img-plato:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;

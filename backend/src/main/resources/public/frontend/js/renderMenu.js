@@ -1,40 +1,41 @@
 import { menuArima } from './menu.js';
 
-function renderMenu() {
-    const contenedorPlatos = document.getElementById('platos');
-    if (!contenedorPlatos) return;
+const platosContainer = document.getElementById('platos');
+const sidebarContainer = document.getElementById('sidebar-links');
 
-    let htmlContent = '';
-
+function renderizarTodo() {
     menuArima.forEach(categoria => {
-        htmlContent += `
-            <article class="menu-category">
-                <header>
-                    <h2 data-i18n="${categoria.i18n}" class="menu-titulo" id="${categoria.id}">
-                        ${categoria.titulo}
-                    </h2>
-                    <div class="img-contenedor">
-                        <img class="img-plato" src="${categoria.img}" alt="${categoria.titulo.toLowerCase()}">
+        // 1. Crear la sección del Menú
+        const seccion = document.createElement('section');
+        seccion.id = categoria.id; // Aquí se asigna el ID (ej: "desayuno", "postres")
+        seccion.className = 'menu-category';
+        
+        seccion.innerHTML = `
+            <h2 class="menu-titulo" data-i18n="${categoria.i18n}">${categoria.titulo}</h2>
+            <div class="img-contenedor">
+                <img src="${categoria.img}" alt="${categoria.titulo}" class="img-plato">
+            </div>
+            <div class="lista-platos">
+                ${categoria.platos.map(plato => `
+                    <div class="plato">
+                        <span class="titulo" data-i18n="${plato.i18n}">${plato.nombre}</span>
+                        <span class="precio">${plato.precio}</span>
                     </div>
-                </header>
-                <div class="platos ${categoria.claseGrid} grid-menu">
-                    ${categoria.platos.map(plato => `
-                        <div class="plato">
-                            <h3 class="titulo" data-i18n="${plato.i18n}">${plato.nombre}</h3>
-                            <p class="precio">${plato.precio}</p>
-                        </div>
-                    `).join('')}
-                </div>
-            </article>
+                `).join('')}
+            </div>
         `;
+        platosContainer.appendChild(seccion);
+
+        // 2. Crear el enlace en la Barra Lateral
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <a href="#${categoria.id}">
+                <span class="circulo-sidebar"></span>
+                <span data-i18n="${categoria.i18n}">${categoria.titulo}</span>
+            </a>
+        `;
+        sidebarContainer.appendChild(li);
     });
-
-    contenedorPlatos.innerHTML = htmlContent;
-
-    if (window.translatePage) {
-        window.translatePage();
-    }
-    
 }
 
-document.addEventListener('DOMContentLoaded', renderMenu);
+renderizarTodo();
