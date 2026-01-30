@@ -5,7 +5,7 @@ class Navbar extends HTMLElement {
             <nav class="navbar-container">
                 <div class="logo">
                     <a href="index.html">
-                        <img src="utils/img/Logo sin fondo.png" alt="logo">
+                        <img src="utils/img/Logo-sin-fondo.png" alt="logo">
                     </a>
                 </div>
                

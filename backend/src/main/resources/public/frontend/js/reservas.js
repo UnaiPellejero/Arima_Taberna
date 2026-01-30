@@ -59,7 +59,6 @@ function verTab(tipo) {
 }
 
 function mostrarMensajeAuth(texto, color, formulario) {
-    // Eliminar mensaje previo si existe
     const mensajePrevio = formulario.querySelector('.mensaje-auth');
     if (mensajePrevio) mensajePrevio.remove();
 
@@ -80,41 +79,30 @@ function mostrarMensajeAuth(texto, color, formulario) {
 // --- EVENTOS PRINCIPALES ---
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializar Calendario
     initCalendario(i18n.currentLang || 'es');
 
-    // 1. Manejo de Reservas
     const formReserva = document.getElementById('form-reserva');
     const modalConfirm = document.getElementById('modal-confirmacion');
     const cerrarModal = document.getElementById('cerrar-modal');
 
+    // 1. Manejo de Reservas
     if (formReserva) {
         formReserva.addEventListener('submit', async function(e) {
             e.preventDefault();
-
-            // Validar que se haya seleccionado una fecha en el calendario
             const fechaVal = document.getElementById('fecha-hidden').value;
             if (!fechaVal) {
-                const msg = i18n.currentLang === 'es' ? 'Por favor, selecciona una fecha' : 'Mesedez, hautatu data bat';
-                alert(msg);
+                alert(i18n.currentLang === 'es' ? 'Por favor, selecciona una fecha' : 'Mesedez, hautatu data bat');
                 return;
             }
 
-            // Capturamos todos los datos del formulario
             const formData = new FormData(formReserva);
             const params = new URLSearchParams(formData);
 
             try {
-                // Enviamos la petición al backend (App.java)
-                const response = await fetch('/reservar', {
-                    method: 'POST',
-                    body: params
-                });
-
+                const response = await fetch('/reservar', { method: 'POST', body: params });
                 const result = await response.text();
 
                 if (result === "success") {
-                    // Preparamos el mensaje de confirmación
                     const horaVal = document.getElementById('hora').value;
                     const nombreVal = document.getElementById('nombre').value;
                     const detalleMsg = i18n.currentLang === 'es' 
@@ -122,134 +110,86 @@ document.addEventListener('DOMContentLoaded', () => {
                         : `Erreserba berretsia ${fechaVal}(e)rako ${horaVal}(e)tan, ${nombreVal}(r)en.`;
                     
                     document.getElementById('modal-detalle-reserva').innerText = detalleMsg;
-                    
-                    // Mostramos el modal de éxito
                     modalConfirm.classList.add('active');
                 } else {
-                    alert(i18n.currentLang === 'es' ? "Error al procesar la reserva" : "Errorea erreserba egitean");
+                    alert(i18n.currentLang === 'es' ? "Error: No hay mesas disponibles" : "Errorea: Ez dago mahai librerik");
                 }
             } catch (error) {
-                console.error("Error:", error);
-                alert("Error de conexión con el servidor");
+                alert("Error de conexión");
             }
         });
     }
 
-    // 2. Manejo de Modal Auth (Login/Registro)
+    // 2. Manejo de Modal Auth
     const btnAbrirAuth = document.getElementById('abrir-auth');
     const modalAuth = document.getElementById('modal-auth');
     const btnCerrarAuth = document.getElementById('cerrar-auth');
     const loginForm = document.getElementById('form-login');
+    const registroForm = document.getElementById('form-registro');
 
     if(btnAbrirAuth) {
-        btnAbrirAuth.addEventListener('click', (e) => {
-            e.preventDefault();
-            modalAuth.style.display = 'flex';
-        });
+        btnAbrirAuth.onclick = (e) => { e.preventDefault(); modalAuth.style.display = 'flex'; };
     }
-
     if(btnCerrarAuth) {
         btnCerrarAuth.onclick = () => modalAuth.style.display = 'none';
     }
 
-    // 3. Petición de Login al Backend (Spark Java)
+    // 3. Petición de Login
     if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(loginForm);
-        const params = new URLSearchParams(formData);
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const params = new URLSearchParams(new FormData(loginForm));
+            try {
+                const response = await fetch('/login-auth', { method: 'POST', body: params });
+                const result = await response.text();
 
-        try {
-            const response = await fetch('/login-auth', {
-                method: 'POST',
-                body: params
-            });
-
-            const result = await response.text();
-
-            // Ahora 'result' puede ser "1" (Admin), "2" (Cliente) o "error"
-            if (result === "1") {
-                mostrarMensajeAuth("¡Bienvenido, Administrador!", "verde", loginForm);
-                setTimeout(() => {
-                    window.location.href = "admin.html"; // Redirige a gestión
-                }, 1000);
-            } 
-            else if (result === "2") {
-                mostrarMensajeAuth("¡Login con éxito! Bienvenido.", "verde", loginForm);
-                setTimeout(() => {
-                    window.location.href = "index.html"; // Redirige a inicio cliente
-                }, 1000);
-            } 
-            else {
-                mostrarMensajeAuth("Usuario o contraseña incorrectos", "rojo", loginForm);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            mostrarMensajeAuth("Error de conexión con el servidor", "rojo", loginForm);
-        }
-    });
-}
-    fetch('/api/usuario-actual')
-    .then(res => res.json())
-    .then(user => {
-        if (user.nombre) {
-            document.querySelector('[name="nombre"]').value = user.nombre;
-            document.querySelector('[name="telefono"]').value = user.telefono;
-            // Si tienes un campo email, también podrías rellenarlo
-        }
-    });
-
-    // Cerrar modal al hacer clic fuera
-    if (cerrarModal) {
-            cerrarModal.addEventListener('click', () => {
-                modalConfirm.classList.remove('active');
-                formReserva.reset(); // Limpia campos de texto
-                calendario.clear();   // Limpia el calendario flatpickr
-                actualizarFechaDisplay(null); // Resetea el texto visual de la fecha
-            });
-        }
-
-    // Exponer funciones necesarias globalmente
-    window.verTab = verTab;
-    // 4. Petición de Registro al Backend (Spark Java)
-        const registroForm = document.getElementById('form-registro');
-        if (registroForm) {
-            registroForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const formData = new FormData(registroForm);
-                const params = new URLSearchParams(formData);
-    
-                console.log("Enviando datos de registro..."); // Debug en navegador
-    
-                try {
-                    const response = await fetch('/registro', {
-                        method: 'POST',
-                        body: params
-                    });
-    
-                    const result = await response.text();
-    
-                    if (result === "success") {
-                        mostrarMensajeAuth("¡Registro con éxito! Ya puedes entrar.", "verde", registroForm);
-                        setTimeout(() => {
-                            verTab('login'); // Te manda al login automáticamente
-                            registroForm.reset();
-                        }, 2000);
-                    } else {
-                        mostrarMensajeAuth("Error: El usuario ya existe o faltan datos", "rojo", registroForm);
-                    }
-                } catch (error) {
-                    console.error("Error:", error);
-                    mostrarMensajeAuth("Error de conexión", "rojo", registroForm);
+                if (result === "1") {
+                    window.location.href = "/admin";
+                } else if (result === "2") {
+                    mostrarMensajeAuth("Bienvenido", "verde", loginForm);
+                    setTimeout(() => { window.location.href = "/"; }, 1000);
+                } else {
+                    mostrarMensajeAuth("Credenciales incorrectas", "rojo", loginForm);
                 }
-            });
-        }
+            } catch (error) {
+                mostrarMensajeAuth("Error de servidor", "rojo", loginForm);
+            }
+        });
+    }
+
+    // 4. Petición de Registro
+    if (registroForm) {
+        registroForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const params = new URLSearchParams(new FormData(registroForm));
+            try {
+                const response = await fetch('/registro', { method: 'POST', body: params });
+                const result = await response.text();
+                if (result === "success") {
+                    mostrarMensajeAuth("¡Registro con éxito!", "verde", registroForm);
+                    setTimeout(() => { verTab('login'); registroForm.reset(); }, 2000);
+                } else {
+                    mostrarMensajeAuth("Error en el registro", "rojo", registroForm);
+                }
+            } catch (error) {
+                mostrarMensajeAuth("Error de conexión", "rojo", registroForm);
+            }
+        });
+    }
+
+    if (cerrarModal) {
+        cerrarModal.onclick = () => {
+            modalConfirm.classList.remove('active');
+            formReserva.reset();
+            calendario.clear();
+            actualizarFechaDisplay(null);
+        };
+    }
 });
 
-// Actualizar calendario si cambia el idioma
 document.addEventListener('languageChanged', () => {
-    const lang = i18n.currentLang;
-    initCalendario(lang);
+    initCalendario(i18n.currentLang);
     actualizarFechaDisplay(calendario.selectedDates[0] || null);
 });
+
+window.verTab = verTab;

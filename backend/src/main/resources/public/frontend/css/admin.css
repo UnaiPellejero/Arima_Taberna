@@ -12,7 +12,7 @@ body {
 
 /* Contenedor Principal */
 .admin-container {
-    padding: 40px 50px;
+    padding: 20px 50px;
 }
 
 .admin-card {
@@ -26,7 +26,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .admin-header h2 {

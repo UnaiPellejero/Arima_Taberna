@@ -1,17 +1,11 @@
 package app;
 
-import java.io.FileInputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
 import java.util.Properties;
-
-import static spark.Spark.get;
-import static spark.Spark.port;
-import static spark.Spark.post;
-import static spark.Spark.staticFiles;
+import java.io.FileInputStream;
+import static spark.Spark.*;
 
 public class App {
     private static String DB_URL;
@@ -19,330 +13,199 @@ public class App {
     private static String DB_PASS;
 
     public static void main(String[] args) {
+        cargarConfiguracion();
 
-        cargarConfiguracion(); 
-
-        // Configuración de archivos estáticos
-        staticFiles.location("public/frontend");
+        // CONFIGURACIÓN DE ARCHIVOS ESTÁTICOS
+        staticFiles.location("/public/frontend");
         port(4568);
-        
+
+        // --- RUTA PRINCIPAL CON INYECCIÓN DE DATOS (SSR) ---
         get("/", (req, res) -> {
-            res.redirect("/index.html");
-            return null;
-        });
-
-        // Ruta de Login (Sin cambios)
-    post("/login-auth", (req, res) -> {
-    String identificador = req.queryParams("email");
-    String pass = req.queryParams("password");
-    
-    String sql = "SELECT id, usuario, email, telefono, tipo FROM Arima_BD.usuarios " +
-                 "WHERE (usuario = ? OR email = ?) AND contrasena = ?";
-    
-    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, identificador);
-        ps.setString(2, identificador);
-        ps.setString(3, pass);
-        
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                int tipo = rs.getInt("tipo");
-                req.session().attribute("user_id", rs.getInt("id"));
-                req.session().attribute("user_tipo", tipo);
-                req.session().attribute("user_nombre", rs.getString("usuario"));
-                req.session().attribute("user_email", rs.getString("email"));      
-                req.session().attribute("user_telefono", rs.getString("telefono")); 
-                
-                // Enviamos el tipo al frontend para que decida la redirección
-                return String.valueOf(tipo); 
-            }
-        }
-    } catch (SQLException e) { e.printStackTrace(); }
-    
-    res.status(401);
-    return "error";
-});
-post("/reservar", (req, res) -> {
-    try {
-        Integer idCliente = req.session().attribute("user_id");
-        String fecha = req.queryParams("fecha");
-        String hora = req.queryParams("hora");
-        int personas = Integer.parseInt(req.queryParams("personas"));
-        String nombre = req.queryParams("nombre");
-        String telefono = req.queryParams("telefono");
-        String comentarios = req.queryParams("comentarios");
-
-        boolean exito = registrarReserva(fecha, hora, personas, nombre, telefono, comentarios, idCliente);
-        return exito ? "success" : "error";
-    } catch (Exception e) {
-        e.printStackTrace();
-        return "error";
-    }
-});
-
-        // --- RUTA DE REGISTRO ACTUALIZADA ---
-        post("/registro", (req, res) -> {
-            String user = req.queryParams("usuario");
-            String email = req.queryParams("email");
-            String pass = req.queryParams("password");
-            String telf = req.queryParams("telefono"); // <--- Nuevo campo capturado
-
-            // Pasamos el teléfono al método SQL
-            boolean exito = registrarUsuario(user, email, pass, telf, 2);
-            return exito ? "success" : "error";
-        });
-        //Ruta usuario actual
-        get("/api/usuario-actual", (req, res) -> {
-        res.type("application/json");
-        if (req.session().attribute("user_id") == null) {
-            return "{}";
-        }
-    // Devolvemos un JSON con los datos de la sesión
-    return String.format(
-        "{\"nombre\":\"%s\", \"email\":\"%s\", \"telefono\":\"%s\"}",
-        req.session().attribute("user_nombre"),
-        req.session().attribute("user_email"),
-        req.session().attribute("user_telefono")
-    );
-});
-post("/api/admin/reservas/actualizar", (req, res) -> {
-    // NOTA: Se añadió una coma después de comentarios=?
-    String sql = "UPDATE Arima_BD.reservas SET nombre=?, telefono=?, fecha=?, hora=?, personas=?, comentarios=?, id_mesa=? WHERE id=?";
-    
-    int idReserva = Integer.parseInt(req.queryParams("id"));
-    int pax = Integer.parseInt(req.queryParams("pax"));
-    String[] parts = req.queryParams("fechaHora").split("T");
-    String fecha = parts[0];
-    String hora = parts[1];
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-        // 1. Buscamos una mesa adecuada para los nuevos datos
-        Integer nuevaMesa = buscarMesaDisponible(conn, fecha, hora, pax, idReserva);
-        
-        if (nuevaMesa == null) {
-            return "error_no_capacity"; // No hay mesas para ese número de personas en esa hora
-        }
-
-        // 2. Ejecutamos el update con la mesa encontrada
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, req.queryParams("nombre"));
-            ps.setString(2, req.queryParams("tel"));
-            ps.setString(3, fecha);
-            ps.setString(4, hora);
-            ps.setInt(5, pax);
-            ps.setString(6, req.queryParams("comentarios"));
-            ps.setInt(7, nuevaMesa); 
-            ps.setInt(8, idReserva);
+            res.type("text/html; charset=utf-8");
             
-            return ps.executeUpdate() > 0 ? "success" : "error";
-        }
-    } catch (Exception e) { 
-        e.printStackTrace(); 
-        return "error"; 
-    }
-});
-        // --- RUTA PARA PROCESAR RESERVAS ---
-        get("/api/admin/reservas", (req, res) -> {
-    res.type("application/json");
-    StringBuilder json = new StringBuilder("[");
-    
-    // Consulta para traer los datos reales de la reserva + email del cliente
-    String sql = "SELECT r.id, r.nombre, u.email, r.telefono, r.fecha, r.hora, r.personas, r.comentarios, r.estado, r.id_mesa " +
-             "FROM Arima_BD.reservas r " +
-             "LEFT JOIN Arima_BD.usuarios u ON r.id_cliente = u.id";
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-         PreparedStatement ps = conn.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
-
-        while (rs.next()) {
-            if (json.length() > 1) json.append(",");
-            json.append(String.format(
-                "{\"id\":%d, \"nombre\":\"%s\", \"email\":\"%s\", \"tel\":\"%s\", \"fechaHora\":\"%s %s\", \"pax\":%d, \"comentarios\":\"%s\", \"estado\":\"%s\", \"idMesa\":%d}",
-                rs.getInt("id"), rs.getString("nombre"), 
-                rs.getString("email") != null ? rs.getString("email") : "N/A",
-                rs.getString("telefono"), rs.getString("fecha"), rs.getString("hora"),
-                rs.getInt("personas"), rs.getString("comentarios"), rs.getString("estado"),
-                rs.getInt("id_mesa")
-            ));
-        }
-    } catch (SQLException e) { e.printStackTrace(); }
-    
-    json.append("]");
-    return json.toString();
-});
-    get("/api/ver-reservas", (req, res) -> {
-    res.type("application/json");
-    StringBuilder json = new StringBuilder("[");
-    
-    // Consulta que une reservas con clientes para tener toda la info
-    String sql = "SELECT r.id, r.fecha, r.hora, r.personas, r.nombre, r.telefono, r.comentarios, r.estado " +
-                 "FROM Arima_BD.reservas r";
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-         PreparedStatement ps = conn.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
-
-        while (rs.next()) {
-            if (json.length() > 1) json.append(",");
-            json.append(String.format(
-                "{\"id\":\"%s\", \"fecha\":\"%s\", \"hora\":\"%s\", \"personas\":%d, \"nombre\":\"%s\", \"tel\":\"%s\", \"estado\":\"%s\"}",
-                rs.getInt("id"), rs.getString("fecha"), rs.getString("hora"), 
-                rs.getInt("personas"), rs.getString("nombre"), rs.getString("telefono"), rs.getString("estado")
-            ));
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    
-    json.append("]");
-    return json.toString();
-});
-
-        System.out.println("Servidor de Arima Taberna funcionando en http://localhost:4568");
-    }
-
-private static Integer buscarMesaDisponible(Connection conn, String fecha, String hora, int personas, Integer idReservaAExcluir) throws SQLException {
-    String sql = 
-        "SELECT id_mesa FROM Arima_BD.mesas " +
-        "WHERE cantidad_personas >= ? " +
-        "AND id_mesa NOT IN (" +
-        "    SELECT id_mesa FROM Arima_BD.reservas " +
-        "    WHERE fecha = ? " +
-        "    AND ABS(TIMEDIFF(hora, ?)) < '01:30:00'" +
-        (idReservaAExcluir != null ? " AND id != ?" : "") + // Solo añade esto si hay un ID
-        ") " +
-        "ORDER BY cantidad_personas ASC LIMIT 1";
-
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, personas);
-        ps.setString(2, fecha);
-        ps.setString(3, hora);
-        // Si hay ID, lo asignamos al parámetro número 4
-        if (idReservaAExcluir != null) {
-            ps.setInt(4, idReservaAExcluir);
-        }
-        
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) return rs.getInt("id_mesa");
-        }
-    }
-    return null;
-}
-
-    // --- MÉTODOS SQL ---
-/* 
-    private static Integer obtenerTipoSiCredencialesValidas(String identificador, String contrasena) {
-        // Mantenemos esta consulta pero asegúrate de que 'email' existe en tu BD tras los errores previos
-        String sql = "SELECT tipo FROM Arima_BD.usuarios WHERE (usuario = ? OR email = ?) AND contrasena = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, identificador);
-            ps.setString(2, identificador);
-            ps.setString(3, contrasena);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getInt("tipo");
+            String html = "";
+            try (InputStream is = App.class.getResourceAsStream("/public/frontend/index.html")) {
+                if (is == null) return "Error: No se encontró index.html en /public/frontend/";
+                html = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            } catch (Exception e) {
+                return "Error al cargar el archivo: " + e.getMessage();
             }
-        } catch (SQLException e) { e.printStackTrace(); }
-        return null;
-    } */
 
-    // --- MÉTODO REGISTRAR ACTUALIZADO ---
-    private static boolean registrarUsuario(String usuario, String email, String contrasena, String telefono, int tipo) {
-    String sqlUser = "INSERT INTO Arima_BD.usuarios (usuario, email, contrasena, telefono, tipo) VALUES (?, ?, ?, ?, ?)";
-    String sqlCliente = "INSERT INTO Arima_BD.clientes (id_cliente, nombre_completo, telefono, email) VALUES (?, ?, ?, ?)";
-    // Nueva SQL para la tabla empleados
-    String sqlEmpleado = "INSERT INTO Arima_BD.empleados (id_empleado, nombre, rol) VALUES (?, ?, ?)";
+            // Sacamos datos de la sesión
+            String nombre = req.session().attribute("user_nombre");
+            String telefono = req.session().attribute("user_telefono");
 
-    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-        conn.setAutoCommit(false); 
+            if (nombre != null) {
+                // Inyectamos los valores en los inputs de la reserva
+                html = html.replace("id=\"nombre\" name=\"nombre\"", "id=\"nombre\" name=\"nombre\" value=\"" + nombre + "\"");
+                html = html.replace("id=\"telefono\" name=\"telefono\"", "id=\"telefono\" name=\"telefono\" value=\"" + telefono + "\"");
+                
+                // Cambiamos el texto del botón de login por el nombre del usuario
+                html = html.replace("Login", "Hola, " + nombre.split(" ")[0]); 
+            }
 
-        try (PreparedStatement psUser = conn.prepareStatement(sqlUser, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            psUser.setString(1, usuario);
-            psUser.setString(2, email);
-            psUser.setString(3, contrasena);
-            psUser.setString(4, telefono);
-            psUser.setInt(5, tipo);
-            psUser.executeUpdate();
+            return html;
+        });
 
-            ResultSet rs = psUser.getGeneratedKeys();
-            if (rs.next()) {
-                int idGenerado = rs.getInt(1);
+        // --- LOGIN ---
+        post("/login-auth", (req, res) -> {
+            String identificador = req.queryParams("email");
+            String pass = req.queryParams("password");
+            String sql = "SELECT id, usuario, email, telefono, tipo FROM Arima_BD.usuarios " +
+                         "WHERE (usuario = ? OR email = ?) AND contrasena = ?";
 
-                // --- Lógica según el tipo de usuario ---
-                if (tipo == 2) { 
-                    // Caso CLIENTE
-                    try (PreparedStatement psCli = conn.prepareStatement(sqlCliente)) {
-                        psCli.setInt(1, idGenerado);
-                        psCli.setString(2, usuario); 
-                        psCli.setString(3, telefono);
-                        psCli.setString(4, email);
-                        psCli.executeUpdate();
-                    }
-                } else if (tipo == 1) { 
-                    // Caso EMPLEADO
-                    try (PreparedStatement psEmp = conn.prepareStatement(sqlEmpleado)) {
-                        psEmp.setInt(1, idGenerado);
-                        psEmp.setString(2, usuario); // Usamos el username como nombre
-                        psEmp.setString(3, "Staff");  // Rol por defecto, puedes cambiarlo según necesites
-                        psEmp.executeUpdate();
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, identificador);
+                ps.setString(2, identificador);
+                ps.setString(3, pass);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        int tipo = rs.getInt("tipo");
+                        req.session().attribute("user_id", rs.getInt("id"));
+                        req.session().attribute("user_tipo", tipo);
+                        req.session().attribute("user_nombre", rs.getString("usuario"));
+                        req.session().attribute("user_email", rs.getString("email"));
+                        req.session().attribute("user_telefono", rs.getString("telefono"));
+                        return String.valueOf(tipo);
                     }
                 }
-            }
-            conn.commit(); 
-            return true;
-        } catch (SQLException e) {
-            conn.rollback(); 
-            e.printStackTrace();
-            return false;
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
-    }
-}
+            } catch (SQLException e) { e.printStackTrace(); }
+            res.status(401);
+            return "error";
+        });
 
-    // --- MÉTODO RESERVAR ACTUALIZADO ---
-private static boolean registrarReserva(String fecha, String hora, int personas, String nombre, String telefono, String comentarios, Integer idCliente) {
-    String sqlInsert = "INSERT INTO Arima_BD.reservas (fecha, hora, personas, nombre, telefono, comentarios, id_cliente, id_mesa, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pendiente')";
-    
-    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-        // CORRECCIÓN: Añadimos 'null' al final porque es una reserva nueva
-        Integer mesaAsignada = buscarMesaDisponible(conn, fecha, hora, personas, null); 
+        // --- PANEL DE ADMINISTRACIÓN ---
+        get("/admin", (req, res) -> {
+        res.type("text/html; charset=utf-8");
+        String html = "";
+        try (InputStream is = App.class.getResourceAsStream("/public/frontend/admin.html")) {
+            html = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        }
         
-        if (mesaAsignada == null) return false;
+        StringBuilder filas = new StringBuilder();
+        String sql = "SELECT r.*, u.email FROM Arima_BD.reservas r LEFT JOIN Arima_BD.usuarios u ON r.id_cliente = u.id";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+                String email = rs.getString("email") != null ? rs.getString("email") : "Sin registro";
+                String tel = rs.getString("telefono");
+                String comentarios = rs.getString("comentarios") != null ? rs.getString("comentarios") : "";
+                int pax = rs.getInt("personas");
 
-        try (PreparedStatement ps = conn.prepareStatement(sqlInsert)) {
-            ps.setString(1, fecha);
-            ps.setString(2, hora);
-            ps.setInt(3, personas);
-            ps.setString(4, nombre);
-            ps.setString(5, telefono);
-            ps.setString(6, comentarios);
-            
-            if (idCliente != null) ps.setInt(7, idCliente); 
-            else ps.setNull(7, java.sql.Types.INTEGER);
-            
-            ps.setInt(8, mesaAsignada);
-            
+                filas.append("<tr>")
+                    .append("<td>").append(id).append("</td>")
+                    .append("<td>").append(nombre).append("</td>")
+                    .append("<td>").append(email).append("</td>")
+                    .append("<td>").append(tel).append("</td>")
+                    .append("<td>").append(rs.getString("fecha")).append(" ").append(rs.getString("hora")).append("</td>")
+                    .append("<td>").append(pax).append("</td>")
+                    .append("<td>").append(comentarios).append("</td>")
+                    .append("<td><span class='status'>").append(rs.getString("estado")).append("</span></td>")
+                    .append("<td>").append(rs.getInt("id_mesa")).append("</td>")
+                    .append("<td>")
+                    // El botón ahora llama a abrirModal con todos los datos
+                    .append(String.format("<button class='btn-edit' onclick=\"abrirModal(%d, '%s', '%s', '%s', %d, '%s')\">Editar</button>", 
+                            id, nombre, tel, comentarios, pax, email))
+                    .append("</td>")
+                    .append("</tr>");
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        
+        return html.replace("Hola", filas.toString());
+    });
+    post("/admin/actualizar", (req, res) -> {
+        String id = req.queryParams("id");
+        String nombre = req.queryParams("nombre");
+        String tel = req.queryParams("telefono");
+        String pax = req.queryParams("pax");
+        String comentarios = req.queryParams("comentarios");
+
+        String sql = "UPDATE Arima_BD.reservas SET nombre = ?, telefono = ?, personas = ?, comentarios = ? WHERE id = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, nombre);
+            ps.setString(2, tel);
+            ps.setInt(3, Integer.parseInt(pax));
+            ps.setString(4, comentarios);
+            ps.setInt(5, Integer.parseInt(id));
+            ps.executeUpdate();
+        } catch (Exception e) { e.printStackTrace(); }
+        
+        res.redirect("/admin"); // Recarga el panel para ver los cambios
+        return null;
+    });
+
+        // --- REGISTRO ---
+        post("/registro", (req, res) -> {
+            boolean exito = registrarUsuario(req.queryParams("usuario"), req.queryParams("email"), 
+                                            req.queryParams("password"), req.queryParams("telefono"), 2);
+            return exito ? "success" : "error";
+        });
+
+        // --- RESERVAR ---
+        post("/reservar", (req, res) -> {
+            try {
+                boolean exito = registrarReserva(req.queryParams("fecha"), req.queryParams("hora"), 
+                                               Integer.parseInt(req.queryParams("personas")), req.queryParams("nombre"), 
+                                               req.queryParams("telefono"), req.queryParams("comentarios"), 
+                                               req.session().attribute("user_id"));
+                return exito ? "success" : "error";
+            } catch (Exception e) { return "error"; }
+        });
+
+        System.out.println("Servidor iniciado: http://localhost:4568");
+    }
+
+    private static void cargarConfiguracion() {
+        Properties prop = new Properties();
+        try (FileInputStream fis = new FileInputStream("config.properties")) {
+            prop.load(fis);
+            DB_URL = prop.getProperty("db.url");
+            DB_USER = prop.getProperty("db.user");
+            DB_PASS = prop.getProperty("db.pass");
+        } catch (Exception e) { System.err.println("Error config.properties"); }
+    }
+
+    private static boolean registrarUsuario(String usuario, String email, String contrasena, String telefono, int tipo) {
+        String sql = "INSERT INTO Arima_BD.usuarios (usuario, email, contrasena, telefono, tipo) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, usuario); ps.setString(2, email); ps.setString(3, contrasena); ps.setString(4, telefono); ps.setInt(5, tipo);
             return ps.executeUpdate() > 0;
+        } catch (SQLException e) { return false; }
+    }
+
+    private static boolean registrarReserva(String fecha, String hora, int personas, String nombre, String telefono, String comentarios, Integer idCliente) {
+        String sql = "INSERT INTO Arima_BD.reservas (fecha, hora, personas, nombre, telefono, comentarios, id_cliente, id_mesa, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pendiente')";
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            Integer mesa = buscarMesaDisponible(conn, fecha, hora, personas);
+            if (mesa == null) return false;
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, fecha); ps.setString(2, hora); ps.setInt(3, personas);
+                ps.setString(4, nombre); ps.setString(5, telefono); ps.setString(6, comentarios);
+                if (idCliente != null) ps.setInt(7, idCliente); else ps.setNull(7, Types.INTEGER);
+                ps.setInt(8, mesa);
+                return ps.executeUpdate() > 0;
+            }
+        } catch (SQLException e) { return false; }
+    }
+
+    private static Integer buscarMesaDisponible(Connection conn, String fecha, String hora, int personas) throws SQLException {
+        String sql = "SELECT id_mesa FROM Arima_BD.mesas WHERE cantidad_personas >= ? AND id_mesa NOT IN " +
+                     "(SELECT id_mesa FROM Arima_BD.reservas WHERE fecha = ? AND ABS(TIMEDIFF(hora, ?)) < '01:30:00') " +
+                     "ORDER BY cantidad_personas ASC LIMIT 1";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, personas); ps.setString(2, fecha); ps.setString(3, hora);
+            try (ResultSet rs = ps.executeQuery()) { if (rs.next()) return rs.getInt("id_mesa"); }
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
+        return null;
     }
-}
-private static void cargarConfiguracion() {
-    Properties prop = new Properties();
-    try (FileInputStream fis = new FileInputStream("config.properties")) {
-        prop.load(fis);
-        DB_URL = prop.getProperty("db.url");
-        DB_USER = prop.getProperty("db.user");
-        DB_PASS = prop.getProperty("db.pass");
-    } catch (Exception e) {
-        System.err.println("No se pudo cargar el archivo de configuración.");
-        e.printStackTrace();
-    }
-}
 }

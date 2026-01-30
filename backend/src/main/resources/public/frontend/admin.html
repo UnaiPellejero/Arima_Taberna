@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración - Arima Taberna</title>
+    
+    <link rel="icon" type="image/png" href="utils/img/Logo-sin-fondo.png">
+    <link rel="shortcut icon" href="utils/img/Logo-sin-fondo.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="utils/img/Logo-sin-fondo.png">
+
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/contacto.css">
-    <link rel="icon" type="image.png" sizes="32x32" href="imagenes/Arima_Logo.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="imagenes/Arima_Logo.png">
-    <link rel="shortcut icon" href="utils/img/Logo sin fondo.png" type="image/x-icon">
 </head>
 <body>
 
@@ -19,7 +21,6 @@
         <section class="admin-card">
             <div class="admin-header">
                 <h2>Gestión de Reservas</h2>
-
                 <div class="header-tools">
                     <div class="search-box">
                         <input type="text" placeholder="Buscar por nombre o ID..." id="searchInput">
@@ -44,58 +45,87 @@
                         </tr>
                     </thead>
                     <tbody id="tabla-reservas-body">
+                        Hola
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
 
-<div id="reservationModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Editar Reserva</h3>
-            <span class="close-modal">&times;</span>
-        </div>
-        <form id="reservationForm">
-            <input type="hidden" id="resId">
-            <div class="form-group">
-                <label>Nombre y Apellidos</label>
-                <input type="text" id="resNombre" required>
+    <div id="reservationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Reserva</h3>
+                <span class="close-modal" onclick="cerrarModal()">&times;</span>
             </div>
-            <div class="form-row">
+            
+            <form action="/admin/actualizar" method="POST">
+                <input type="hidden" id="resId" name="id">
+                
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="resEmail" required>
+                    <label>Nombre y Apellidos</label>
+                    <input type="text" id="resNombre" name="nombre">
                 </div>
-                <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="tel" id="resTel" required>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Fecha y Hora</label>
-                    <input type="datetime-local" id="resFecha" required>
-                </div>
-                <div class="form-group">
-                    <label>Pax</label>
-                    <input type="number" id="resPax" min="1" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Comentarios</label>
-                <textarea id="resComentarios" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label>ID Mesa Asignada</label>
-                <input type="number" id="resMesa" placeholder="Ej: 5">
-            </div>
-            <button type="submit" class="btn-save">Actualizar Datos</button>
-        </form>
-    </div>
-</div>
 
-    <script src="js/admin.js"></script>
+                <div class="form-group">
+                    <label>Email del Cliente</label>
+                    <input type="email" id="resEmail" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" id="resTel" name="telefono">
+                    </div>
+                    <div class="form-group">
+                        <label>Pax</label>
+                        <input type="number" id="resPax" name="pax">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Comentarios</label>
+                    <textarea id="resComentarios" name="comentarios"></textarea>
+                </div>
+
+                <button type="submit" class="btn-save">GUARDAR CAMBIOS</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    function abrirModal(id, nombre, tel, comentarios, pax, email) {
+        document.getElementById('resId').value = id;
+        document.getElementById('resNombre').value = nombre;
+        document.getElementById('resEmail').value = email;
+        document.getElementById('resTel').value = tel;
+        document.getElementById('resComentarios').value = comentarios;
+        document.getElementById('resPax').value = pax;
+        
+        document.getElementById('reservationModal').style.display = 'block';
+    }
+
+    function cerrarModal() {
+        document.getElementById('reservationModal').style.display = 'none';
+    }
+
+    // Cerrar si hacen clic fuera del modal blanco
+    window.onclick = function(event) {
+        let modal = document.getElementById('reservationModal');
+        if (event.target == modal) {
+            cerrarModal();
+        }
+    }
+
+    // Lógica del Buscador
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('#tabla-reservas-body tr').forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none';
+        });
+    });
+    </script>
+
     <script type="module" src="./js/navbar.js"></script>
 </body>
 </html>

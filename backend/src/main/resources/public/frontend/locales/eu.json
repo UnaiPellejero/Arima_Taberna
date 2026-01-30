@@ -13,7 +13,9 @@
     "contraseña": "Pasahitza",
     "entrar": "Sartu",
     "registro": "Erregistratu",
-    "nombre": "Izen Osoa *",
+    "nombre": "Erabiltzailea*",
+    "email": "Mail edo erabiltzailea*",
+    "telefono": "Telefonoa*",
     "crear": "Kontua sortu"
   },
   "inicio": {
@@ -32,7 +34,8 @@
     "limpiar": "Garbitu",
     "reservar": "Erreserbatu mahaia",
     "reserva_enviada": "Erreserba bidalia",
-    "bienvenida": "Ongietorri Arima Tabernara"
+    "bienvenida": "Ongietorri Arima Tabernara",
+    "entendido": "Ulertua"
   },
   "menu": {
     "menu": "KARTA",
@@ -141,6 +144,7 @@
       "fecha": "Data",
       "mensaje": "Mezua",
       "placeholder": "¿Zertan lagun zaitzakegu?",
+      "placeholder2": "Helbide@helbide.eus",
       "enviar": "Bidali"
     },
     "footer": {

@@ -9,6 +9,7 @@
     "entrar": "Entrar",
     "registro": "Registrarse",
     "nombre": "Nombre Completo *",
+    "email": "Correo Electrónico *",
     "crear": "Crear Cuenta"
 
   },
@@ -28,7 +29,8 @@
     "limpiar": "Limpiar",
     "reservar": "Reservar mesa",
     "reserva_enviada": "Reserva enviada",
-    "bienvenida": "Bienvenido a Arima Taberna"
+    "bienvenida": "Bienvenido a Arima Taberna",
+    "entendido": "Entendido"
   },
   "reservas": {
     "reservas": "Reservas"
