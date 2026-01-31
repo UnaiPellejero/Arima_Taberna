@@ -30,7 +30,7 @@
     "telefono": "Telefonoa *",
     "comentarios": "Iruzkinak(aukerakoa)",
     "preferencias": "Alergiak, lehentasunak…",
-    "privacidad": "Pribatutasun politika onartzen dut*",
+    "privacidad1": "<a href='/privacidad'>Pribatutasun politika</a> onartzen dut *",
     "limpiar": "Garbitu",
     "reservar": "Erreserbatu mahaia",
     "reserva_enviada": "Erreserba bidalia",
@@ -174,5 +174,26 @@
     "modal": {
       "titulo": "Erreserba Editatu",
       "guardar": "ALDAKETAK GORDE"
-    }
+    }, 
+  "privacidad": {
+    "title_tag": "Pribatutasun Politika | Arima Taberna",
+    "titulo": "Pribatutasun Politika",
+    "fecha": "Azken eguneratzea: 2026ko urtarrilaren 29an",
+    "introduccion": "1. Sarrera",
+    "introduccion-text": "Ongi etorri **Arima Taberna**ra. Zure pribatutasuna asko baloratzen dugu eta zure datu pertsonalak babesteko konpromisoa hartzen dugu. Politika honek gure webgunea bisitatzean zure informazioa nola kudeatzen dugun azaltzen du. ",
+    "datos": "2. Biltzen ditugun datuak",
+    "datos-text": "Zuri buruzko datu pertsonal mota desberdinak bildu, erabili eta gorde ditzakegu, honela taldekatu ditugunak:",
+    "datos-identidad": "<strong>Identitate-datuak:</strong> izena eta abizenak.",
+    "datos-contacto": "<strong>Harremanetarako datuak:</strong> posta elektroniko helbidea eta telefono zenbakia.",
+    "datos-tecnicos": "<strong>Datu teknikoak:</strong> IP helbidea, nabigatzaile mota eta kokapena.",
+    "uso": "3. Nola erabiltzen ditugun zure datuak",
+    "uso-text": "Legeak baimentzen digunean bakarrik erabiliko ditugu zure datu pertsonalak. Ohikoena hauetarako erabiltzea da:",
+    "uso-li1": "Eskatu dizkiguzun zerbitzuak emateko.",
+    "uso-li2": "Gure webgunean erabiltzailearen esperientzia hobetzeko.",
+    "uso-li3": "Lege- edo arau-betebehar bat betetzeko.",
+    "derechos": "4. Zure legezko eskubideak",
+    "derechos-text": "Egoera jakin batzuetan, datuak babesteko legeen araberako eskubideak dituzu zure datu pertsonalei dagokienez, horiek ikusteko, zuzentzeko, ezabatzeko edo transferitzeko eskubidea barne.",
+    "contacto-titulo": "5. Kontaktua",
+    "contacto-text": "Pribatutasun-politika honi buruzko zalantzarik baduzu, gurekin harremanetan jar zaitezke hemen:"
   }
+}

@@ -6,16 +6,18 @@ function actualizarFechaDisplay(fecha) {
     if (!fechaDisplay) return;
 
     if (!fecha) {
-        const textoDefault = "inicio.selecciona-fecha".split('.').reduce((obj, i) => (obj ? obj[i] : null), i18n.translations);
-        fechaDisplay.innerHTML = `${textoDefault || 'Selecciona una fecha →'}`;
+        // Fallback seguro por si i18n no ha cargado
+        const textoDefault = i18n.translations && i18n.translations.inicio ? 
+                             i18n.translations.inicio["selecciona-fecha"] : "Selecciona una fecha →";
+        fechaDisplay.innerHTML = `${textoDefault}`;
         return;
     }
 
-    const lang = i18n.currentLang;
+    const lang = i18n.currentLang || 'es';
     const locales = { 'es': 'es-ES', 'eu': 'eu-ES' };
     
     const dia = fecha.getDate();
-    const mes = fecha.toLocaleDateString(locales[lang] || 'es-ES', { month: 'short' });
+    const mes = fecha.toLocaleDateString(locales[lang], { month: 'short' });
     const año = fecha.getFullYear();
 
     fechaDisplay.innerHTML = `<strong>${dia} ${mes.replace('.', '')} ${año}</strong>`;
@@ -24,22 +26,34 @@ function actualizarFechaDisplay(fecha) {
 function initCalendario(lang) {
     if (calendario) calendario.destroy();
     
-    const l10n = lang === 'eu' ? flatpickr.l10ns.eu : flatpickr.l10ns.es;
-    l10n.firstDayOfWeek = 1;
+    // Validación de seguridad para el idioma eu
+    let configLocale = "es"; 
+    if (lang === 'eu') {
+        // Verificamos si la librería de euskera está disponible, si no, usamos es
+        configLocale = (window.flatpickr && flatpickr.l10ns && flatpickr.l10ns.eu) ? 'eu' : 'es';
+    }
+
     calendario = flatpickr("#calendario-visible", {
-        locale: lang === 'es' ? 'es' : 'eu',
-        inline: true,    // Para que esté siempre abierto
-        static: true,    // Para que se mantenga dentro de su div contenedor
+        locale: configLocale,
+        inline: true,
+        static: true,
         minDate: "today",
         dateFormat: "Y-m-d",
-        monthSelectorType: "static", // Evita que el selector de mes deforme el header
+        monthSelectorType: "static",
         onChange: function(selectedDates, dateStr) {
-            document.getElementById('fecha-hidden').value = dateStr;
+            const hiddenInput = document.getElementById('fecha-hidden');
+            if(hiddenInput) hiddenInput.value = dateStr;
             if (selectedDates.length > 0) {
                 actualizarFechaDisplay(selectedDates[0]);
             }
         }
     });
+
+    // Forzamos el lunes como primer día después de inicializar
+    if (calendario.config && calendario.config.locale) {
+        calendario.l10n.firstDayOfWeek = 1;
+        calendario.redraw();
+    }
 }
 
 // --- LÓGICA DE LOGIN Y MODAL DE AUTH ---
@@ -61,7 +75,31 @@ function verTab(tipo) {
         tabs[0].classList.remove('active');
     }
 }
+// Funcion Autorelleno
+async function autorrellenarFormulario() {
+    try {
+        const response = await fetch('/get-session-user');
+        const data = await response.json();
 
+        if (data.logged) {
+            const inputNombre = document.getElementById('nombre');
+            const inputEmail = document.getElementById('email');
+            const inputTel = document.getElementById('telefono');
+
+            if (inputNombre) inputNombre.value = data.nombre;
+            if (inputEmail) inputEmail.value = data.email;
+            if (inputTel) inputTel.value = data.telefono;
+            
+            // Si el botón de login existe, podrías cambiarle el texto aquí también
+            if (btnLogin) {
+                btnLogin.textContent = "Hola, " +  data.nombre.split(" ")[0];
+                btnLogin.classList.add("btn-usuario-logeado"); // Añadimos una clase
+            }
+        }
+    } catch (error) {
+        console.error("Error al obtener datos de sesión:", error);
+    }
+}
 function mostrarMensajeAuth(texto, color, formulario) {
     const mensajePrevio = formulario.querySelector('.mensaje-auth');
     if (mensajePrevio) mensajePrevio.remove();
@@ -83,6 +121,7 @@ function mostrarMensajeAuth(texto, color, formulario) {
 // --- EVENTOS PRINCIPALES ---
 
 document.addEventListener('DOMContentLoaded', () => {
+    autorrellenarFormulario();
     initCalendario(i18n.currentLang || 'es');
 
     const formReserva = document.getElementById('form-reserva');
@@ -192,8 +231,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('languageChanged', () => {
-    initCalendario(i18n.currentLang);
-    actualizarFechaDisplay(calendario.selectedDates[0] || null);
+    const lang = i18n.currentLang || 'es';
+    initCalendario(lang);
+    
+    // Si ya había una fecha seleccionada, la mantenemos
+    const fechaPrevia = document.getElementById('fecha-hidden').value;
+    if (fechaPrevia) {
+        calendario.setDate(fechaPrevia);
+        actualizarFechaDisplay(calendario.selectedDates[0]);
+    } else {
+        actualizarFechaDisplay(null);
+    }
 });
-
 window.verTab = verTab;

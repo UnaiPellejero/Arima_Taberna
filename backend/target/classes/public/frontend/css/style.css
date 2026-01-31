@@ -114,7 +114,17 @@ img.user-icon {
     vertical-align: middle;
     margin: 0 0 0 10px;
 }
-
+.btn-usuario-logeado::after {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    vertical-align: middle;
+    background-image: url('../img/usuario2.png'); 
+    background-size: contain;
+    background-repeat: no-repeat;
+}
 .modal-overlay {
     display: none;
     position: fixed;
@@ -278,6 +288,7 @@ img.user-icon {
     display: flex;
     flex-direction: column;
     width: 100%;
+    border-bottom: none !important;
 }
 .urlSidebar {
     list-style: none;
@@ -301,6 +312,7 @@ img.user-icon {
 .urlSidebar li a:hover {
     color: var(--color-destacado);
 }
+
 html {
     scroll-behavior: smooth;
 }

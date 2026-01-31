@@ -17,31 +17,26 @@ const i18n = {
     },
 
     translatePage() {
-        const elements = document.querySelectorAll('[data-i18n]');
-        elements.forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            const translation = key.split('.').reduce((obj, i) => (obj ? obj[i] : null), this.translations);
-            
-            if (translation) {
-                
-                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                    el.placeholder = translation;
-                    return; 
-                }
-
-                if (el.childNodes.length > 0) {
-                    let textNode = Array.from(el.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
-                    if (textNode) {
-                        textNode.textContent = translation;
-                    } else {
-                        el.textContent = translation;
-                    }
-                } else {
-                    el.textContent = translation;
-                }
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        // Esto navega por el JSON (ej: privacidad.titulo)
+        const translation = key.split('.').reduce((obj, i) => (obj ? obj[i] : null), this.translations);
+        
+        if (translation) {
+            // 1. Manejo de inputs y textareas (Placeholders)
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = translation;
+                return; 
             }
-        });
-    }
+
+            // 2. Manejo de etiquetas con HTML (como los <strong> de tu política)
+            // Usamos innerHTML para que el navegador renderice las negritas
+            el.innerHTML = translation;
+        }
+    });
+},
+
 };
 
 window.i18n = i18n;

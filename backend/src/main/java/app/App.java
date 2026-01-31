@@ -75,7 +75,24 @@ public class App {
             res.status(401);
             return "error";
         });
+        //Loguin
+       get("/get-session-user", (req, res) -> {
+    res.type("application/json");
+    res.header("Content-Encoding", "UTF-8");
+    
+    String nombre = req.session().attribute("user_nombre");
+    String email = req.session().attribute("user_email");
+    String telefono = req.session().attribute("user_telefono");
 
+    if (nombre != null) {
+        return String.format(
+            "{\"logged\": true, \"nombre\": \"%s\", \"email\": \"%s\", \"telefono\": \"%s\"}",
+            nombre, email, telefono
+        );
+    } else {
+        return "{\"logged\": false}";
+    }
+});
         // --- PANEL DE ADMINISTRACIÓN ---
         get("/admin", (req, res) -> {
         res.type("text/html; charset=utf-8");

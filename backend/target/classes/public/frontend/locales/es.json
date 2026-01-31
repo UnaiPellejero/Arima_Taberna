@@ -1,4 +1,9 @@
 {
+  "head": {
+    "inicio": "Inicio | Arima Taldea",
+    "somos":"Quiénes somos | Arima Taldea",
+    "contacto": "Contacto | Arima Taldea"
+  },
   "nav": {
     "inicio": "Inicio",
     "somos": "Quiénes somos",
@@ -25,7 +30,7 @@
     "telefono": "Teléfono *",
     "comentarios": "Comentario(opcional)",
     "preferencias": "Alergias, preferencias…",
-    "privacidad": "Acepto la ",
+    "privacidad1": "Acepto la <a href='/privacidad'>política de privacidad</a> *",
     "limpiar": "Limpiar",
     "reservar": "Reservar mesa",
     "reserva_enviada": "Reserva enviada",
@@ -171,5 +176,26 @@
     "modal": {
       "titulo": "Editar Reserva",
       "guardar": "GUARDAR CAMBIOS"
-    }
+    },
+  "privacidad": {
+    "title_tag": "Política de Privacidad | Arima Taberna",
+    "titulo": "Política de Privacidad",
+    "fecha": "Última actualización: 29 de enero de 2026",
+    "introduccion": "1. Introducción",
+    "introduccion-text": "Bienvenido a <strong>Arima Taberna</strong>. Valoramos mucho tu privacidad y nos comprometemos a proteger tus datos personales. Esta política explica cómo manejamos tu información cuando visitas nuestro sitio web.",
+    "datos": "2. Datos que recopilamos",
+    "datos-text": "Podemos recopilar, usar y almacenar diferentes tipos de datos personales sobre ti, que hemos agrupado de la siguiente manera:",
+    "datos-identidad": "<strong>Datos de identidad:</strong> nombre y apellidos.",
+    "datos-contactos": "<strong>Datos de contacto:</strong> dirección de correo electrónico y número de teléfono.",
+    "datos-tecnicos": "<strong>Datos técnicos:</strong> dirección IP, tipo de navegador y ubicación.",
+    "uso": "3. Cómo utilizamos tus datos",
+    "uso-text": "Solo utilizaremos tus datos personales cuando la ley nos lo permita. Lo más común es que los usemos para:",
+    "uso-li1": "Prestarte los servicios que nos has solicitado.",
+    "uso-li2": "Mejorar la experiencia de usuario en nuestra web.",
+    "uso-li3": "Cumplir con una obligación legal o reglamentaria.",
+    "derechos": "4. Tus derechos legales",
+    "derechos-text": "Bajo ciertas circunstancias, tienes derechos bajo las leyes de protección de datos en relación con tus datos personales, incluyendo el derecho a solicitar el acceso, corrección, eliminación o transferencia de los mismos.",
+    "contacto-titulo": "5. Contacto",
+    "contacto-text": "Si tienes alguna pregunta sobre esta política de privacidad, puedes contactarnos en:"
+  }
 }
